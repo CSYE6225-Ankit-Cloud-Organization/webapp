@@ -20,9 +20,10 @@ userController.createUser = async (req, res) => {
         const validationResult = validator.checkRequiredFields(req.body, requiredFields);
         const missingFields = validationResult?.missingFields || [];
         // const extraFields = validationResult?.extraFields || [];
+        const extraFields = validationResult?.extraFields || [];
 
         // check if the json payload is valid
-        if (missingFields.length > 0) {
+        if (missingFields.length > 0 || extraFields.length > 0) {
             console.log('Invalid Fields');
             return res.status(400).send();
         }
@@ -40,6 +41,7 @@ userController.createUser = async (req, res) => {
             return res.status(400).send();
         }
         //--------repeated code -- service
+
         // check if email already exits in the db or not
         const findUser = await User.findOne({
             where: {
@@ -78,8 +80,7 @@ userController.createUser = async (req, res) => {
             console.log('user created successfully!!');
             return res.status(201).json(responsePayload);
         }
-    }
-    catch (error) {
+    }catch (error) {
         console.error('Error creating user:', error.message);
         return res.status(500).send();
     }
