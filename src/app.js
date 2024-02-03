@@ -3,8 +3,7 @@
 const express = require('express')
 const app = express();
 require('dotenv').config(); // required to read the .env file
-const Routes = require('./routes/routes'); // loading module containg routes
-const checkUrl = require('./validators/validator'); //loading module containing validators
+const route = require('./routes/routes'); // loading module containg routes
 
 app.use(express.json()); // middleware to parse the json from the request body
 
@@ -13,7 +12,7 @@ app.use((req, res, next) => {
     res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
     next();
 });
-app.use(checkUrl);
-app.use('/',Routes); // using the routes
+route(app);
+// app.use('/',Routes); // using the routes
 
 module.exports = app;
