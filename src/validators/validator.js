@@ -1,7 +1,8 @@
 const express = require('express');
 
+const validations = {};
 //to check if the url is only healthz or not
-const checkUrl = (req, res, next) => {
+validations.checkUrl = (req, res, next) => {
   const allowedEndpoint = '/healthz';
   if (req.method === 'GET' && req.path !== allowedEndpoint) {
     console.log("healthz is allowed only");
@@ -10,11 +11,10 @@ const checkUrl = (req, res, next) => {
   next();
 };
 
-const checkAuthorization = (req,res,next) =>{
+validations.checkAuthorization = (req, res, next) => {
   const authHeader = req.header('Authorization');
   if (!authHeader) {
     return res.status(401).send();
-      // return res.status(401).json({ message: 'Authorization header missing' });
   }
 
   // Decode the base64 authorization header
@@ -23,6 +23,21 @@ const checkAuthorization = (req,res,next) =>{
   console.log(`${email} ${password}`);
   next();
 }
+
+validations.checkRequiredFields= (dataObject, expectedFields) => {
+  const providedFields = Object.keys(dataObject);
+  const missingFields = expectedFields.filter(
+    (field) => !providedFields.includes(field)
+  );
+  const excessFields = providedFields.filter(
+    (field) => !expectedFields.includes(field)
+  );
+
+  return {
+    missingFields,excessFields
+  };
+}
+
 // const checkJson = (req,res,next)=> {
 //   const jsonString = JSON.stringify(req.body);
 //   console.log("in check json");
@@ -42,4 +57,4 @@ const checkAuthorization = (req,res,next) =>{
 //     next();
 // };
 
-module.exports = checkUrl;
+module.exports = validations;

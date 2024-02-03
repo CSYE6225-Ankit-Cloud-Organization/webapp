@@ -1,12 +1,13 @@
-const express = require('express');
-const healthController = require('../controllers/controller');
-const checkUrl = require('../validators/validator');
-const router = express.Router();
+const dbHealthRouter = require('./dbhealth-route');
+const userRouter = require('./user-route'); 
 
-// defining the routes for our application
+const route = (app) => {
+    app.use('/healthz', dbHealthRouter);
+    app.use('/v1/user', userRouter);
 
-// This route will hanlde all requests made to /healthz
-router.all('/healthz', healthController);
-// router.all('/authentication',authController);
+    app.all('*', (req, res) => {
+        res.status(404).json();
+    });
+}
 
-module.exports = router;
+module.exports = route;
