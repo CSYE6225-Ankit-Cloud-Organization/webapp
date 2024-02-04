@@ -41,7 +41,6 @@ userController.createUser = async (req, res) => {
             return res.status(400).send();
         }
         //--------repeated code -- service
-
         // check if email already exits in the db or not
         const findUser = await User.findOne({
             where: {
@@ -170,6 +169,7 @@ userController.updateUser = async (req, res) => {
 
         // check if the json payload is valid
         if (extraFields.length > 0 || missingFields.length == 3) {
+
             console.log('Invalid Fields');
             return res.status(400).send();
         }
