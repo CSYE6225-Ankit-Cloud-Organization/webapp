@@ -4,6 +4,8 @@ const PORT = process.env.APP_PORT || 3000; // picking the port details from env 
 // const sequelize = require('./src/config/dbConnection');
 // const User = require('./src/models/User'); // Import the User model
 
+
+
 // sequelize.sync({ force: true }).then(() => {
 //     console.log('Database synced successfully');
 // })
