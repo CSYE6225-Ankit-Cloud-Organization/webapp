@@ -34,11 +34,11 @@ const healthController = async (req, res) => {
         }
         else {
             console.error('######### Connection Unsuccessful #########', error);
-            return res.status(200).send();
+            return res.status(503).send();
         }
     } catch (error) {
         console.error('######### Connection Unsuccessful #########', error);
-        return res.status(200).end();
+        return res.status(503).end();
     }
 };
 
