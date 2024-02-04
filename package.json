@@ -1,0 +1,23 @@
+{
+  "name": "ankit_goyal_002773317_01",
+  "version": "1.0.0",
+  "description": "CSYE6225-Network Structures and Cloud Computing",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "mocha tests/integration-test.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "dotenv": "^16.4.1",
+    "express": "^4.18.2",
+    "mocha": "^10.2.0",
+    "pg": "^8.11.3",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.36.0",
+    "supertest": "^6.3.4"
+  }
+}
