@@ -9,7 +9,7 @@ const PORT = process.env.APP_PORT || 3000; // picking the port details from env 
 // })
 
 //     .catch((error) => {
-//         console.error('Error syncing database:', error);
+//         console.error('Error syncing database::', error);
 //     });
 
 app.listen(PORT, () => {
