@@ -5,11 +5,11 @@ const { Sequelize } = require('sequelize');
 require('dotenv').config();
 
 const sequelize = new Sequelize({
-    "username": postgres,
-    "password": postgres,
-    "database": postgres,
-    "host": localhost,
-    "dialect": postgres
+    "username": 'postgres',
+    "password": 'postgres',
+    "database": 'postgres',
+    "host": 'localhost',
+    "dialect": 'postgres'
 });
 // const sequelize = new Sequelize({
 //     "username": process.env.DB_USER,
