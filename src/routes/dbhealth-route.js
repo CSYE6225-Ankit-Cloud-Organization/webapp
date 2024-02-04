@@ -7,5 +7,4 @@ const dbHealthRouter = express.Router();
 // This route will handle all requests made to /healthz
 dbHealthRouter.all('', healthController);
 
-
 module.exports = dbHealthRouter;
