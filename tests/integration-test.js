@@ -10,6 +10,6 @@ describe('Integration Tests', () => {
       .expect('Content-Type', /json/);
 
     assert.deepStrictEqual(response.body, { message: 'Hello, World!' });
-    // Add more assertions as needed
+
   });
 });
