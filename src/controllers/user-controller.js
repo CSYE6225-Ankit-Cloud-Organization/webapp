@@ -162,13 +162,13 @@ userController.updateUser = async (req, res) => {
         }
         // check for extra fields
         const { first_name, last_name, json_password, username } = req.body;
-        const requiredFields = ['first_name', 'last_name', 'password', 'username'];
+        const requiredFields = ['first_name', 'last_name', 'password'];
         const validationResult = validator.checkRequiredFields(req.body, requiredFields);
         const missingFields = validationResult?.missingFields || [];
-        // const extraFields = validationResult?.extraFields || [];
+        const extraFields = validationResult?.extraFields || [];
 
         // check if the json payload is valid
-        if (missingFields.length > 0) {
+        if (extraFields.length > 0 || missingFields.length == 3) {
             console.log('Invalid Fields');
             return res.status(400).send();
         }

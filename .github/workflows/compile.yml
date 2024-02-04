@@ -3,7 +3,7 @@ name: NodeJs CI Compilation code
 on:
   pull_request:
     branches:
-      - orgtestb2
+      - orgb3
 
 jobs:
   build:
