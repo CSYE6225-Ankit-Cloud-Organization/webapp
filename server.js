@@ -9,7 +9,7 @@ const User = require('./src/models/User'); // Import the User model
 // })
 
 //     .catch((error) => {
-//         console.error('Error syncing database:', error);
+//         console.error('Error syncing database::', error);
 //     });
 
 app.listen(PORT, () => {
