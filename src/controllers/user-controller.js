@@ -169,7 +169,6 @@ userController.updateUser = async (req, res) => {
 
         // check if the json payload is valid
         if (extraFields.length > 0 || missingFields.length == 3) {
-
             console.log('Invalid Fields');
             return res.status(400).send();
         }
