@@ -19,10 +19,10 @@ userController.createUser = async (req, res) => {
         const requiredFields = ['first_name', 'last_name', 'password', 'username'];
         const validationResult = validator.checkRequiredFields(req.body, requiredFields);
         const missingFields = validationResult?.missingFields || [];
-        const extraFields = validationResult?.extraFields || [];
+        // const extraFields = validationResult?.extraFields || [];
 
         // check if the json payload is valid
-        if (missingFields.length > 0 || extraFields.length > 0) {
+        if (missingFields.length > 0) {
             console.log('Invalid Fields');
             return res.status(400).send();
         }
@@ -165,10 +165,10 @@ userController.updateUser = async (req, res) => {
         const requiredFields = ['first_name', 'last_name', 'password', 'username'];
         const validationResult = validator.checkRequiredFields(req.body, requiredFields);
         const missingFields = validationResult?.missingFields || [];
-        const extraFields = validationResult?.extraFields || [];
+        // const extraFields = validationResult?.extraFields || [];
 
         // check if the json payload is valid
-        if (missingFields.length > 0 || extraFields.length > 0) {
+        if (missingFields.length > 0) {
             console.log('Invalid Fields');
             return res.status(400).send();
         }
