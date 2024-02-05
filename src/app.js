@@ -4,6 +4,7 @@ const express = require('express')
 const app = express();
 require('dotenv').config(); // required to read the .env file
 const route = require('./routes/routes'); // loading module containg routes
+const validations = require('./validators/validator');
 
 app.use(express.json()); // middleware to parse the json from the request body
 
@@ -12,6 +13,8 @@ app.use((req, res, next) => {
     res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
     next();
 });
+// middleware to check if check query parameters are passed by the user
+app.use(validations.checkQueryParameters);
 route(app);
 // app.use('/',Routes); // using the routes
 

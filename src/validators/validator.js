@@ -1,6 +1,16 @@
 const express = require('express');
 
 const validations = {};
+
+ //check if the user tries to be smart and sends query parameters or not
+ validations.checkQueryParameters = (req, res, next) =>{
+  if (Object.keys(req.query).length > 0) {
+    console.log(`Query Parameters not Allowed`);
+    return res.status(400).send();
+ }
+ next();
+};
+
 //to check if the url is only healthz or not
 validations.checkUrl = (req, res, next) => {
   const allowedEndpoint = '/healthz';
@@ -32,7 +42,9 @@ validations.checkRequiredFields= (dataObject, expectedFields) => {
   const excessFields = providedFields.filter(
     (field) => !expectedFields.includes(field)
   );
-
+    // console.log("inside validation");
+    // console.log(excessFields);
+    // console.log(missingFields);
   return {
     missingFields,excessFields
   };
