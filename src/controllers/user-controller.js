@@ -13,28 +13,28 @@ const userController = {};
 userController.createUser = async (req, res) => {
 
     try {
-        //--------repeated code
         const { first_name, last_name, password, username } = req.body;
         // Define the expected fields
-        const requiredFields = ['first_name', 'last_name', 'password', 'username'];
-        const validationResult = validator.checkRequiredFields(req.body, requiredFields);
-        const missingFields = validationResult?.missingFields || [];
-        // const extraFields = validationResult?.extraFields || [];
-        const extraFields = validationResult?.extraFields || [];
-
+        const acceptableFields = ['first_name', 'last_name', 'password', 'username','account_created','account_updated'];
+        const validationResult = validator.checkRequiredFields(req.body, acceptableFields);
+        const missingField = validationResult?.missingFields || [];
+        const excessFields = validationResult?.excessFields || [];
+        const missingFields = missingField.filter(missingField => !['account_created', 'account_updated'].includes(missingField))
         // check if the json payload is valid
-        if (missingFields.length > 0 || extraFields.length > 0) {
-            console.log('Invalid Fields');
+        if (missingFields.length > 0 || excessFields.length > 0) {
+            console.log('Required fields are missing or more fields..');
             return res.status(400).send();
         }
 
         // check if the email format is correct or not
-        if (typeof username !== 'string' || !username.trim()) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (typeof username !== 'string' || !username.trim() || !emailRegex.test(username.trim())) {
             console.log('Invalid username format');
             return res.status(400).send();
         }
         // check for other fields format
         if (typeof first_name !== 'string' || !first_name.trim() ||
+            !/^[a-zA-Z]+$/.test(first_name) || !/^[a-zA-Z]+$/.test(last_name) ||
             typeof last_name !== 'string' || !last_name.trim() ||
             typeof password !== 'string' || !password.trim()) {
             console.log('Invalid required fields');
@@ -79,7 +79,7 @@ userController.createUser = async (req, res) => {
             console.log('user created successfully!!');
             return res.status(201).json(responsePayload);
         }
-    }catch (error) {
+    } catch (error) {
         console.error('Error creating user:', error.message);
         return res.status(500).send();
     }
@@ -133,11 +133,6 @@ userController.getUser = async (req, res) => {
 //to update the user details
 userController.updateUser = async (req, res) => {
     try {
-        //check if the user tries to be smart and sends query parameters or not
-        if (Object.keys(req.query).length > 0) {
-            console.log(`Query Parameters not Allowed`);
-            return res.status(400).send();
-        }
         // check if the auth method is basic
         // check if the auth field is not empty
         if (!req.headers.authorization || req.headers.authorization.indexOf('Basic') === -1) {
@@ -161,20 +156,24 @@ userController.updateUser = async (req, res) => {
             return res.status(401).send();
         }
         // check for extra fields
-        const { first_name, last_name, json_password, username } = req.body;
+        const { first_name, last_name, json_password } = req.body;
         const requiredFields = ['first_name', 'last_name', 'password'];
         const validationResult = validator.checkRequiredFields(req.body, requiredFields);
         const missingFields = validationResult?.missingFields || [];
-        const extraFields = validationResult?.extraFields || [];
+        const extraFields = validationResult?.excessFields || [];
 
         // check if the json payload is valid
         if (extraFields.length > 0 || missingFields.length == 3) {
             console.log('Invalid Fields');
             return res.status(400).send();
         }
-        // verify if user is trying to access his own account
-        if (username !== email) {
-            return res.status(403).send();
+        // check for other fields format
+        if (typeof first_name !== 'string' || !first_name.trim() ||
+            !/^[a-zA-Z]+$/.test(first_name) || !/^[a-zA-Z]+$/.test(last_name) ||
+            typeof last_name !== 'string' || !last_name.trim() ||
+            typeof password !== 'string' || !password.trim()) {
+            console.log('Invalid required fields');
+            return res.status(400).send();
         }
         //hash the password again
         const hashedPassword = await bcrypt.hash(json_password, saltRounds);
@@ -182,7 +181,7 @@ userController.updateUser = async (req, res) => {
         user.first_name = first_name;
         user.last_name = last_name;
         user.password = hashedPassword;
-        user.account_updated =new Date().toISOString(); 
+        user.account_updated = new Date().toISOString();
 
         await user.save();
         return res.status(204).send();
@@ -191,5 +190,4 @@ userController.updateUser = async (req, res) => {
         return res.status(500).send();
     }
 };
-//jshs
 module.exports = userController;
