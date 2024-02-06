@@ -16,6 +16,5 @@ app.use((req, res, next) => {
 // middleware to check if check query parameters are passed by the user
 app.use(validations.checkQueryParameters);
 route(app);
-// app.use('/',Routes); // using the routes
 
 module.exports = app;

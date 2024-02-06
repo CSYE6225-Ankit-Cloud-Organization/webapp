@@ -9,7 +9,7 @@ sequelize.sync({ alter: true }).then(() => {
 })
 
     .catch((error) => {
-        console.error('Error syncing database::', error);
+        console.error('Error syncing database');
     });
 
 app.listen(PORT, () => {

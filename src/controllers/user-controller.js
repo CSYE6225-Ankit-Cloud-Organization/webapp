@@ -88,11 +88,13 @@ userController.createUser = async (req, res) => {
 //to fetch authenticated user details
 userController.getUser = async (req, res) => {
     try {
-        //check if the user tries to be smart and sends query parameters or not
-        if (Object.keys(req.query).length > 0) {
-            console.log(`Query Parameters not Allowed`);
+        //check if the request payload is empty or not
+        if (Object.keys(req.body).length > 0) {
+            console.log(Object.keys(req.body).length);
+            console.log(`Request Payload should be Empty!`);
             return res.status(400).send();
         }
+
         // check if the auth method is basic
         // check if the auth field is not empty
         if (!req.headers.authorization || req.headers.authorization.indexOf('Basic') === -1) {
@@ -142,7 +144,7 @@ userController.updateUser = async (req, res) => {
         //decode token and
         const base64Cred = req.headers.authorization.split(' ')[1];
         const credentials = Buffer.from(base64Cred, 'base64').toString('ascii');
-        const [email, password] = credentials.split(':');
+        const [email, auth_password] = credentials.split(':');
 
         //compare against db and check if user exits
         const user = await User.findOne({ where: { username: email } });
@@ -151,12 +153,12 @@ userController.updateUser = async (req, res) => {
             return res.status(401).send();
         }
         //check password
-        const isPasswordMatch = bcrypt.compareSync(password, user.password)
+        const isPasswordMatch = bcrypt.compareSync(auth_password, user.password)
         if (!isPasswordMatch) {
             return res.status(401).send();
         }
         // check for extra fields
-        const { first_name, last_name, json_password } = req.body;
+        const { first_name, last_name, password } = req.body;
         const requiredFields = ['first_name', 'last_name', 'password'];
         const validationResult = validator.checkRequiredFields(req.body, requiredFields);
         const missingFields = validationResult?.missingFields || [];
@@ -176,7 +178,7 @@ userController.updateUser = async (req, res) => {
             return res.status(400).send();
         }
         //hash the password again
-        const hashedPassword = await bcrypt.hash(json_password, saltRounds);
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
         // update firstname, lastname, password and account_updated 
         user.first_name = first_name;
         user.last_name = last_name;
