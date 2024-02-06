@@ -1,14 +1,14 @@
 const express = require('express');
-
+const services = require('../services/service');
 const validations = {};
 
- //check if the user tries to be smart and sends query parameters or not
- validations.checkQueryParameters = (req, res, next) =>{
+//check if the user tries to be smart and sends query parameters or not
+validations.checkQueryParameters = (req, res, next) => {
   if (Object.keys(req.query).length > 0) {
     console.log(`Query Parameters not Allowed`);
     return res.status(400).send();
- }
- next();
+  }
+  next();
 };
 
 //to check if the url is only healthz or not
@@ -21,20 +21,7 @@ validations.checkUrl = (req, res, next) => {
   next();
 };
 
-validations.checkAuthorization = (req, res, next) => {
-  const authHeader = req.header('Authorization');
-  if (!authHeader) {
-    return res.status(401).send();
-  }
-
-  // Decode the base64 authorization header
-  const authData = Buffer.from(authHeader.split(' ')[1], 'base64').toString('utf-8');
-  const [email, password] = authData.split(':');
-  console.log(`${email} ${password}`);
-  next();
-}
-
-validations.checkRequiredFields= (dataObject, expectedFields) => {
+validations.checkRequiredFields = (dataObject, expectedFields) => {
   const providedFields = Object.keys(dataObject);
   const missingFields = expectedFields.filter(
     (field) => !providedFields.includes(field)
@@ -42,31 +29,46 @@ validations.checkRequiredFields= (dataObject, expectedFields) => {
   const excessFields = providedFields.filter(
     (field) => !expectedFields.includes(field)
   );
-    // console.log("inside validation");
-    // console.log(excessFields);
-    // console.log(missingFields);
+  // console.log("inside validation");
+  // console.log(excessFields);
+  // console.log(missingFields);
   return {
-    missingFields,excessFields
+    missingFields, excessFields
   };
-}
+};
 
-// const checkJson = (req,res,next)=> {
-//   const jsonString = JSON.stringify(req.body);
-//   console.log("in check json");
-//   try {
-//       const jsonData = JSON.parse(req.body);
-//       // If parsing is successful, jsonData contains the parsed JSON
-//       res.status(200).json({ success: true, data: jsonData });
-//     } catch (error) {
-//       if (error instanceof SyntaxError) {
-//         // Handle SyntaxError (Invalid JSON)
-//         res.status(400).send();
-//       } else {
-//         // Handle other types of errors
-//         res.status(500).send();
-//       }
-//     }
-//     next();
-// };
+validations.checkContentType = (req, res, next) => {
+  //check if the user choose other than JSON content type for the request payload
+  if (req.get('Content-Type') !== undefined && req.get('Content-Type') !== 'application/json') {
+    console.log(`only json allowed`);
+    return res.status(400).send();
+  }
+  next();
+};
+
+validations.checkDbhealth = async (req, res, next) => {
+  try {
+    const isDbHealthy = await services.dbHealthCheck();
+
+    if (!isDbHealthy) {
+      console.error('Error checking database health:');
+      return res.status(503).send();
+  } }
+  catch (error) {
+    console.error('Error checking database health:', error);
+    res.status(503).send();
+  }
+  next();
+};
+
+validations.checkEmptyPayload = (req,res,next) =>{
+   //check if the request payload is empty or not
+   if (Object.keys(req.body).length > 0) {
+    console.log(Object.keys(req.body).length);
+    console.log(`Request Payload should be Empty!`);
+    return res.status(400).send();
+}
+next();
+};
 
 module.exports = validations;
