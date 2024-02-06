@@ -1,11 +1,10 @@
 const express = require('express');
-const { Op } = require('sequelize');
 const bcrypt = require('bcrypt');
 const sequelize = require('../config/dbConnection');
 const { dbHealthCheck } = require('../services/service');
 const validator = require('../validators/validator');
 const User = require('../models/User');
-
+const dbServices = require('../services/service');
 const saltRounds = 10;
 const userController = {};
 
@@ -42,14 +41,9 @@ userController.createUser = async (req, res) => {
             return res.status(400).send();
         }
 
+        const findUser = await dbServices.findUserByUsername(username);
+
         // check if email already exits in the db or not
-        const findUser = await User.findOne({
-            where: {
-                username: {
-                    [Op.iLike]: username // Case-insensitive search
-                }
-            }
-        });
         if (findUser) {
             console.log(`username exists already`);
             return res.status(400).send();
@@ -108,8 +102,9 @@ userController.getUser = async (req, res) => {
         const [email, password] = credentials.split(':');
 
         //compare against db
-        const user = await User.findOne({ where: { username: email } });
+        const user = await dbServices.findUserByUsername(email);
         console.log(user);
+
         if (!user) {
             return res.status(401).send();
         }
@@ -118,6 +113,7 @@ userController.getUser = async (req, res) => {
         if (!isPasswordMatch) {
             return res.status(401).send();
         }
+
         // fetch the details and return as json
         const responsePayload = {
             id: user.id,
@@ -133,7 +129,7 @@ userController.getUser = async (req, res) => {
         return res.status(500).send();
     }
 };
-//to update the user details
+// to update the user details
 userController.updateUser = async (req, res) => {
     try {
         // check if the auth method is basic
@@ -148,8 +144,9 @@ userController.updateUser = async (req, res) => {
         const [email, auth_password] = credentials.split(':');
 
         //compare against db and check if user exits
-        const user = await User.findOne({ where: { username: email } });
+        const user = await dbServices.findUserByUsername(email);
         console.log(user);
+
         if (!user) {
             return res.status(401).send();
         }
