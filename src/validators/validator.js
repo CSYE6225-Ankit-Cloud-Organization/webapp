@@ -21,6 +21,8 @@ validations.checkUrl = (req, res, next) => {
   next();
 };
 
+// to check missing and excess fields as per the required fields in request payload
+
 validations.checkRequiredFields = (dataObject, expectedFields) => {
   const providedFields = Object.keys(dataObject);
   const missingFields = expectedFields.filter(
@@ -29,14 +31,12 @@ validations.checkRequiredFields = (dataObject, expectedFields) => {
   const excessFields = providedFields.filter(
     (field) => !expectedFields.includes(field)
   );
-  // console.log("inside validation");
-  // console.log(excessFields);
-  // console.log(missingFields);
   return {
     missingFields, excessFields
   };
 };
 
+// to validate the requesy body content type
 validations.checkContentType = (req, res, next) => {
   //check if the user choose other than JSON content type for the request payload
   if (req.get('Content-Type') !== undefined && req.get('Content-Type') !== 'application/json') {
@@ -46,6 +46,7 @@ validations.checkContentType = (req, res, next) => {
   next();
 };
 
+// to check the health of the database
 validations.checkDbhealth = async (req, res, next) => {
   try {
     const isDbHealthy = await services.dbHealthCheck();
@@ -53,7 +54,8 @@ validations.checkDbhealth = async (req, res, next) => {
     if (!isDbHealthy) {
       console.error('Error checking database health:');
       return res.status(503).send();
-  } }
+    }
+  }
   catch (error) {
     console.error('Error checking database health:', error);
     res.status(503).send();
@@ -61,14 +63,15 @@ validations.checkDbhealth = async (req, res, next) => {
   next();
 };
 
-validations.checkEmptyPayload = (req,res,next) =>{
-   //check if the request payload is empty or not
-   if (Object.keys(req.body).length > 0) {
+// to check if the request body is empty or not
+validations.checkEmptyPayload = (req, res, next) => {
+  //check if the request payload is empty or not
+  if (Object.keys(req.body).length > 0) {
     console.log(Object.keys(req.body).length);
     console.log(`Request Payload should be Empty!`);
     return res.status(400).send();
-}
-next();
+  }
+  next();
 };
 
 module.exports = validations;

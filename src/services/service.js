@@ -1,7 +1,7 @@
 const express = require('express');
 const sequelize = require('../config/dbConnection');
 
-//this service will try to send a dummy query for databases server authentication
+//this service will try to send a dummy query to database for server authentication
 const dbHealthCheck = async () => {
   try {
     await sequelize.authenticate();
