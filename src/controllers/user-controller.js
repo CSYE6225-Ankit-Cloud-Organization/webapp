@@ -59,7 +59,7 @@ userController.createUser = async (req, res) => {
                     password: hashedPassword,
                     username: username,
                     account_created: new Date().toISOString(),
-                    account_updated: new Date().toISOString(),
+                    account_updated: new Date().toISOString()
                 });
 
             //send the 201 status code and response without the password
@@ -84,31 +84,28 @@ userController.createUser = async (req, res) => {
 userController.getUser = async (req, res) => {
     try {
         //check if the request payload is empty or not
-        if (Object.keys(req.body).length > 0) {
-            console.log(Object.keys(req.body).length);
-            console.log(`Request Payload should be Empty!`);
-            return res.status(400).send();
-        }
 
         // check if the auth method is basic
         // check if the auth field is not empty
-        if (!req.headers.authorization || req.headers.authorization.indexOf('Basic') === -1) {
-            return res.status(401).send();
-        }
         // check if the user exits in db - 
-        //decode token and
+        //decode token 
         const base64Cred = req.headers.authorization.split(' ')[1];
         const credentials = Buffer.from(base64Cred, 'base64').toString('ascii');
         const [email, password] = credentials.split(':');
+        
+        // check if both email and password exist
+        if (!email || !password) {
+            return res.status(401).send();
+          }
 
-        //compare against db
+        //compare username against db
         const user = await dbServices.findUserByUsername(email);
         console.log(user);
 
         if (!user) {
             return res.status(401).send();
         }
-        //check password
+        //check password against db
         const isPasswordMatch = bcrypt.compareSync(password, user.password)
         if (!isPasswordMatch) {
             return res.status(401).send();
@@ -134,14 +131,17 @@ userController.updateUser = async (req, res) => {
     try {
         // check if the auth method is basic
         // check if the auth field is not empty
-        if (!req.headers.authorization || req.headers.authorization.indexOf('Basic') === -1) {
-            return res.status(401).send();
-        }
+    
         // check if the user exits in db - 
         //decode token and
         const base64Cred = req.headers.authorization.split(' ')[1];
         const credentials = Buffer.from(base64Cred, 'base64').toString('ascii');
         const [email, auth_password] = credentials.split(':');
+
+        // check if both email and password exist
+        if (!email || !auth_password) {
+            return res.status(401).send();
+          }
 
         //compare against db and check if user exits
         const user = await dbServices.findUserByUsername(email);
@@ -182,7 +182,7 @@ userController.updateUser = async (req, res) => {
         user.last_name = last_name;
         user.password = hashedPassword;
         user.account_updated = new Date().toISOString();
-
+        
         await user.save();
         return res.status(204).send();
     } catch (error) {
