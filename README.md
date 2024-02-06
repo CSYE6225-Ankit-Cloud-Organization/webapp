@@ -40,7 +40,9 @@ DB_DIALECT=postgres
 <h2>Supported API Endpoints by the Application</h2>
 
 <h3>Health Check Endpoint</h3>
-<p>GET /healthz: Verifies database connection</p>
+<ul>
+  <li><code>GET /healthz</code>: Verifies database connection</li>
+</ul>
 
 <h3>User Endpoints</h3>
 <h4>1. Authenticated Endpoints</h4>
