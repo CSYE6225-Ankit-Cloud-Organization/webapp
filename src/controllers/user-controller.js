@@ -15,11 +15,12 @@ userController.createUser = async (req, res) => {
     try {
         const { first_name, last_name, password, username } = req.body;
         // Define the expected fields
-        const acceptableFields = ['first_name', 'last_name', 'password', 'username','account_created','account_updated'];
+        const acceptableFields = ['first_name', 'last_name', 'password', 'username', 'account_created', 'account_updated'];
         const validationResult = validator.checkRequiredFields(req.body, acceptableFields);
         const missingField = validationResult?.missingFields || [];
         const excessFields = validationResult?.excessFields || [];
         const missingFields = missingField.filter(missingField => !['account_created', 'account_updated'].includes(missingField))
+
         // check if the json payload is valid
         if (missingFields.length > 0 || excessFields.length > 0) {
             console.log('Required fields are missing or more fields..');
@@ -40,7 +41,7 @@ userController.createUser = async (req, res) => {
             console.log('Invalid required fields');
             return res.status(400).send();
         }
-        //--------repeated code -- service
+
         // check if email already exits in the db or not
         const findUser = await User.findOne({
             where: {

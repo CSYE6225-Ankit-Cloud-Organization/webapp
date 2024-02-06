@@ -4,6 +4,7 @@ Configuration file to create a sequelize instance to connect to our database usi
 const { Sequelize } = require('sequelize');
 require('dotenv').config();
 
+// creating a new sequelize instance
 const sequelize = new Sequelize({
     "username": process.env.DB_USER,
     "password": process.env.DB_PASSWORD,

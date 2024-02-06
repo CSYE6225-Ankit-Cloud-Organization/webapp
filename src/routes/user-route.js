@@ -6,6 +6,8 @@ const userRouter = express.Router();
 userRouter.get('/self', validations.checkDbhealth, validations.checkEmptyPayload, userController.getUser);
 userRouter.put('/self', validations.checkDbhealth, validations.checkContentType, userController.updateUser);
 userRouter.post('', validations.checkContentType, validations.checkDbhealth, userController.createUser);
+
+//explicitly handle all other api call options
 userRouter.all('*', (req, res) => {
     if (req.method === 'HEAD' || req.method === 'OPTIONS') {
         res.status(404).send();
