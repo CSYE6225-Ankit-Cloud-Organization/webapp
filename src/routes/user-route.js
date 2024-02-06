@@ -3,9 +3,13 @@ const userController = require('../controllers/user-controller');
 const validations = require('../validators/validator');
 const userRouter = express.Router();
 
-userRouter.get('/self', validations.checkDbhealth, validations.checkEmptyPayload, userController.getUser);
-userRouter.put('/self', validations.checkDbhealth, validations.checkContentType, userController.updateUser);
+userRouter.head('/self', (req, res) => {
+    res.status(404).send();
+});
+userRouter.get('/self', validations.checkEmptyPayload, validations.checkContentType, validations.checkAuthorizationFields, validations.checkDbhealth, userController.getUser);
+userRouter.put('/self', validations.checkContentType, validations.checkAuthorizationFields, validations.checkDbhealth, userController.updateUser);
 userRouter.post('', validations.checkContentType, validations.checkDbhealth, userController.createUser);
+
 
 //explicitly handle all other api call options
 userRouter.all('*', (req, res) => {

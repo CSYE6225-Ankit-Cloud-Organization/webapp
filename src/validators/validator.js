@@ -74,4 +74,11 @@ validations.checkEmptyPayload = (req, res, next) => {
   next();
 };
 
+validations.checkAuthorizationFields = (req, res, next) => {
+  if (!req.headers.authorization || req.headers.authorization.indexOf('Basic') === -1) {
+    return res.status(401).send();
+  }
+  next();
+}
+
 module.exports = validations;
