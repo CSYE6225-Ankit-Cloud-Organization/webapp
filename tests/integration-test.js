@@ -5,6 +5,6 @@ describe('Simple CI test', () => {
   it('should compare two string', () => {
     const req = {message: 'Hello World'};
     // Check the result
-    assert.deepStrictEqual(req.message, { message: 'Hello World' });
+    assert.deepStrictEqual(req, {message: 'Hello World'});
   });
 });
