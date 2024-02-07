@@ -22,15 +22,15 @@ userController.createUser = async (req, res) => {
 
         // check if the json payload is valid
         if (missingFields.length > 0 || excessFields.length > 0) {
-            console.log('Required fields are missing or more fields..');
-            return res.status(400).send();
+            // console.log('Required fields are missing or more fields..');
+            return res.status(400).send('required fields missing or excess fields provided');
         }
 
         // check if the email format is correct or not
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (typeof username !== 'string' || !username.trim() || !emailRegex.test(username.trim())) {
-            console.log('Invalid username format');
-            return res.status(400).send();
+            // console.log('Invalid username format');
+            return res.status(400).send('Invalid username');
         }
         // check for other fields format
         if (typeof first_name !== 'string' || !first_name.trim() ||
@@ -38,7 +38,7 @@ userController.createUser = async (req, res) => {
             typeof last_name !== 'string' || !last_name.trim() ||
             typeof password !== 'string' || !password.trim()) {
             console.log('Invalid required fields');
-            return res.status(400).send();
+            return res.status(400).send('Invalid fields');
         }
 
         const findUser = await dbServices.findUserByUsername(username);
@@ -72,11 +72,11 @@ userController.createUser = async (req, res) => {
                 account_updated: newUser.account_updated
             };
             console.log('user created successfully!!');
-            return res.status(201).json(responsePayload);
+            return res.status(201).send();
         }
     } catch (error) {
         console.error('Error creating user:', error.message);
-        return res.status(500).send();
+        return res.status(500).send('Server side issues');
     }
 };
 
@@ -95,7 +95,7 @@ userController.getUser = async (req, res) => {
         
         // check if both email and password exist
         if (!email || !password) {
-            return res.status(401).send();
+            return res.status(401).send('Authorization failed');
           }
 
         //compare username against db
@@ -103,12 +103,12 @@ userController.getUser = async (req, res) => {
         console.log(user);
 
         if (!user) {
-            return res.status(401).send();
+            return res.status(401).send('Authorization failed');
         }
         //check password against db
         const isPasswordMatch = bcrypt.compareSync(password, user.password)
         if (!isPasswordMatch) {
-            return res.status(401).send();
+            return res.status(401).send('Authorization failed');
         }
 
         // fetch the details and return as json
@@ -140,7 +140,7 @@ userController.updateUser = async (req, res) => {
 
         // check if both email and password exist
         if (!email || !auth_password) {
-            return res.status(401).send();
+            return res.status(401).send('Authorization failed');
           }
 
         //compare against db and check if user exits
@@ -148,12 +148,12 @@ userController.updateUser = async (req, res) => {
         console.log(user);
 
         if (!user) {
-            return res.status(401).send();
+            return res.status(401).send('Authorization failed');
         }
         //check password
         const isPasswordMatch = bcrypt.compareSync(auth_password, user.password)
         if (!isPasswordMatch) {
-            return res.status(401).send();
+            return res.status(401).send('Authorization failed');
         }
         // check for extra fields
         const { first_name, last_name, password } = req.body;
@@ -164,16 +164,16 @@ userController.updateUser = async (req, res) => {
 
         // check if the json payload is valid
         if (extraFields.length > 0 || missingFields.length == 3) {
-            console.log('Invalid Fields');
-            return res.status(400).send();
+            // console.log('Invalid Fields');
+            return res.status(400).send('required fields missing or excess fields provided');
         }
         // check for other fields format
         if (typeof first_name !== 'string' || !first_name.trim() ||
             !/^[a-zA-Z]+$/.test(first_name) || !/^[a-zA-Z]+$/.test(last_name) ||
             typeof last_name !== 'string' || !last_name.trim() ||
             typeof password !== 'string' || !password.trim()) {
-            console.log('Invalid required fields');
-            return res.status(400).send();
+            // console.log('Invalid required fields');
+            return res.status(400).send('Invalid fields');
         }
         //hash the password again
         const hashedPassword = await bcrypt.hash(password, saltRounds);

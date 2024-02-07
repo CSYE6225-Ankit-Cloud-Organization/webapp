@@ -66,7 +66,7 @@ validations.checkDbhealth = async (req, res, next) => {
 // to check if the request body is empty or not
 validations.checkEmptyPayload = (req, res, next) => {
   //check if the request payload is empty or not
-  if (Object.keys(req.body).length > 0) {
+  if (Object.keys(req.body).length > 0 || (req._body && typeof req.body === 'object')) {
     console.log(Object.keys(req.body).length);
     console.log(`Request Payload should be Empty!`);
     return res.status(400).send();
