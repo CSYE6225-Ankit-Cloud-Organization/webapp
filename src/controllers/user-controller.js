@@ -41,6 +41,19 @@ userController.createUser = async (req, res) => {
             return res.status(400).send('Invalid fields');
         }
 
+        try {
+            const isDbHealthy = await dbServices.dbHealthCheck();
+        
+            if (!isDbHealthy) {
+              console.error('Error checking database health:');
+              return res.status(503).send();
+            }
+          }
+          catch (error) {
+            console.error('Error checking database health:', error);
+            res.status(503).send();
+          }
+
         const findUser = await dbServices.findUserByUsername(username);
 
         // check if email already exits in the db or not
@@ -72,7 +85,7 @@ userController.createUser = async (req, res) => {
                 account_updated: newUser.account_updated
             };
             console.log('user created successfully!!');
-            return res.status(201).send();
+            return res.status(201).send(responsePayload);
         }
     } catch (error) {
         console.error('Error creating user:', error.message);
