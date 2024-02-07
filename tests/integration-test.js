@@ -3,8 +3,8 @@ const supertest = require('supertest');
 const assert = require('assert');
 describe('Simple CI test', () => {
   it('should compare two string', () => {
-    const req = {message: 'Hello World'};
+    const req = {message: 'Hello Ankit'};
     // Check the result
-    assert.deepStrictEqual(req, {message: 'Hello World'});
+    assert.deepStrictEqual(req, {message: 'Hello Ankit'});
   });
 });
