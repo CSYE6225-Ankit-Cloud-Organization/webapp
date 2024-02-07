@@ -10,7 +10,7 @@ const healthController = async (req, res) => {
             return res.status(405).send();
         }
         //check if the request payload is empty or not
-        if (Object.keys(req.body).length > 0) {
+        if (Object.keys(req.body).length > 0 || (req._body && typeof req.body === 'object')) {
             console.log(Object.keys(req.body).length);
             console.log(`Request Payload should be Empty!`);
             return res.status(400).send();
