@@ -23,3 +23,6 @@ jobs:
 
       - name: Run Tests
         run: npm test
+
+      - name: CI Fail Check
+        run: exit 1
