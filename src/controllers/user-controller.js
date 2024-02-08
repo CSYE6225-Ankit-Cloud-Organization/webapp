@@ -43,16 +43,16 @@ userController.createUser = async (req, res) => {
 
         try {
             const isDbHealthy = await dbServices.dbHealthCheck();
-        
+
             if (!isDbHealthy) {
-              console.error('Error checking database health:');
-              return res.status(503).send();
+                console.error('Error checking database health:');
+                return res.status(503).send();
             }
-          }
-          catch (error) {
+        }
+        catch (error) {
             console.error('Error checking database health:', error);
             res.status(503).send();
-          }
+        }
 
         const findUser = await dbServices.findUserByUsername(username);
 
@@ -105,11 +105,11 @@ userController.getUser = async (req, res) => {
         const base64Cred = req.headers.authorization.split(' ')[1];
         const credentials = Buffer.from(base64Cred, 'base64').toString('ascii');
         const [email, password] = credentials.split(':');
-        
+
         // check if both email and password exist
         if (!email || !password) {
             return res.status(401).send('Authorization failed');
-          }
+        }
 
         //compare username against db
         const user = await dbServices.findUserByUsername(email);
@@ -144,7 +144,7 @@ userController.updateUser = async (req, res) => {
     try {
         // check if the auth method is basic
         // check if the auth field is not empty
-    
+
         // check if the user exits in db - 
         //decode token and
         const base64Cred = req.headers.authorization.split(' ')[1];
@@ -154,7 +154,7 @@ userController.updateUser = async (req, res) => {
         // check if both email and password exist
         if (!email || !auth_password) {
             return res.status(401).send('Authorization failed');
-          }
+        }
 
         //compare against db and check if user exits
         const user = await dbServices.findUserByUsername(email);
@@ -175,27 +175,28 @@ userController.updateUser = async (req, res) => {
         const missingFields = validationResult?.missingFields || [];
         const extraFields = validationResult?.excessFields || [];
 
-        // check if the json payload is valid
-        if (extraFields.length > 0 || missingFields.length == 3) {
-            // console.log('Invalid Fields');
-            return res.status(400).send('required fields missing or excess fields provided');
+        // Check if the json payload is valid
+        if (extraFields.length > 0 || (missingFields.length === 3 && !first_name && !last_name && !password)) {
+            return res.status(400).send('Required fields missing or excess fields provided');
         }
-        // check for other fields format
-        if (typeof first_name !== 'string' || !first_name.trim() ||
-            !/^[a-zA-Z]+$/.test(first_name) || !/^[a-zA-Z]+$/.test(last_name) ||
-            typeof last_name !== 'string' || !last_name.trim() ||
-            typeof password !== 'string' || !password.trim()) {
-            // console.log('Invalid required fields');
+
+        // Check for invalid field format
+        if ((first_name && (!/^[a-zA-Z]+$/.test(first_name) || typeof first_name !== 'string')) ||
+            (last_name && (!/^[a-zA-Z]+$/.test(last_name) || typeof last_name !== 'string')) ||
+            (password && typeof password !== 'string')) {
             return res.status(400).send('Invalid fields');
         }
-        //hash the password again
-        const hashedPassword = await bcrypt.hash(password, saltRounds);
-        // update firstname, lastname, password and account_updated 
-        user.first_name = first_name;
-        user.last_name = last_name;
-        user.password = hashedPassword;
+
+        // Update only the provided fields
+        if (first_name) user.first_name = first_name;
+        if (last_name) user.last_name = last_name;
+        if (password) {
+            const hashedPassword = await bcrypt.hash(password, saltRounds);
+            user.password = hashedPassword;
+        }
+
         user.account_updated = new Date().toISOString();
-        
+
         await user.save();
         return res.status(204).send();
     } catch (error) {
