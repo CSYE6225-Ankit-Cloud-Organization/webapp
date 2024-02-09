@@ -3,7 +3,7 @@ name: Application Check CI
 on:
   pull_request:
     branches:
-      - main
+      - testbranch3
 
 jobs:
   test-build:
@@ -41,7 +41,7 @@ jobs:
         
     - name: Display .env file
       run: |
-        echo APP_PORT=${{ vars.NODE_ENV }} >> .env
+        echo APP_PORT=${{ vars.APP_ENV }} >> .env
         echo DB_NAME=${{ secrets.PGDATABASE }} >> .env
         echo DB_USER=${{ secrets.PGUSER }} >> .env
         echo DB_PASSWORD=${{ secrets.PGPASSWORD }} >> .env
