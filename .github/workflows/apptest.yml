@@ -1,0 +1,54 @@
+name: Application Check CI
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test-build:
+    name: CI
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: 'postgres:latest'
+        env:
+          POSTGRES_DB: ${{ secrets.PGDATABASE }}
+          POSTGRES_USER: ${{ secrets.PGUSER }}
+          POSTGRES_PASSWORD: ${{ secrets.PGPASSWORD }}
+          POSTGRES_PORT: ${{ secrets.PGPORT }}
+          POSTGRES_HOST: ${{ secrets.PGHOST }}
+          DB_DIALECT: 'postgres'
+        ports:
+          - '5432:5432'
+        options: >-
+          --health-cmd pg_isready --health-interval 10s --health-timeout 5s
+          --health-retries 5
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+          node-version: 20.6
+          cache: 'npm'
+
+    - name: Install dependencies
+      run: npm install
+        
+    - name: Display .env file
+      run: |
+        echo APP_PORT=${{ vars.NODE_ENV }} >> .env
+        echo DB_NAME=${{ secrets.PGDATABASE }} >> .env
+        echo DB_USER=${{ secrets.PGUSER }} >> .env
+        echo DB_PASSWORD=${{ secrets.PGPASSWORD }} >> .env
+        echo DB_PORT=${{ secrets.PGPORT }} >> .env
+        echo DB_HOSTNAME=${{ secrets.PGHOST }} >> .env
+        echo DB_DIALECT=postgres >> .env
+        cat .env
+
+    - name: Run Integration tests
+      run : npm test
