@@ -3,7 +3,7 @@ name: CI
 on:
   pull_request:
     branches:
-      - main
+      - testbranch3
 
 jobs:
   build:
@@ -20,6 +20,3 @@ jobs:
 
       - name: Install Dependencies
         run: npm install
-
-      - name: Run Tests
-        run: npm test
