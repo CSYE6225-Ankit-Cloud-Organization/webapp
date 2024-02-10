@@ -23,3 +23,6 @@ jobs:
 
       - name: Run Tests
         run: npm test
+      
+      - name: exit Check
+        run: exit 1
