@@ -4,40 +4,29 @@ on:
   pull_request:
     branches:
       - main
-  push:
-    branches:
-    - main
 
 jobs:
   test-build:
     name: Integration Test CI
     runs-on: ubuntu-latest
 
-    # services:
-    #   postgres:
-    #     image: 'postgres:latest'
-    #     env:
-    #       POSTGRES_DB: ${{ secrets.PGDATABASE }}
-    #       POSTGRES_USER: ${{ secrets.PGUSER }}
-    #       POSTGRES_PASSWORD: ${{ secrets.PGPASSWORD }}
-    #       POSTGRES_PORT: ${{ secrets.PGPORT }}
-    #       POSTGRES_HOST: ${{ secrets.PGHOST }}
-    #       DB_DIALECT: 'postgres'
-    #     ports:
-    #       - '5432:5432'
-    #     options: >-
-    #       --health-cmd pg_isready --health-interval 10s --health-timeout 5s
-    #       --health-retries 5
+    services:
+      postgres:
+        image: 'postgres:latest'
+        env:
+          POSTGRES_DB: ${{ secrets.PGDATABASE }}
+          POSTGRES_USER: ${{ secrets.PGUSER }}
+          POSTGRES_PASSWORD: ${{ secrets.PGPASSWORD }}
+          POSTGRES_PORT: ${{ secrets.PGPORT }}
+          POSTGRES_HOST: ${{ secrets.PGHOST }}
+          DB_DIALECT: 'postgres'
+        ports:
+          - '5432:5432'
+        options: >-
+          --health-cmd pg_isready --health-interval 10s --health-timeout 5s
+          --health-retries 5
 
     steps:
-    - name: Print Secrets
-      run: |
-        echo "POSTGRES_DB: ${{ secrets.PGDATABASE }}"
-        echo "POSTGRES_USER: ${{ secrets.PGUSER }}"
-        echo "POSTGRES_PASSWORD: ${{ secrets.PGPASSWORD }}"
-        echo "POSTGRES_PORT: ${{ secrets.PGPORT }}"
-        echo "POSTGRES_HOST: ${{ secrets.PGHOST }}"
-
     - name: Checkout code
       uses: actions/checkout@v3
       
