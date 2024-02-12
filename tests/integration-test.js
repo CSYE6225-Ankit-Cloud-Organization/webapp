@@ -1,4 +1,4 @@
-const app = require('../src/app'); // Update with the correct path to your app file
+const app = require('../src/app');
 const supertest = require('supertest');
 const assert = require('assert');
 const sequelize = require('../src/config/dbConnection');
@@ -14,10 +14,11 @@ before(async () => {
   }
 });
 
-describe('User API Integration Tests', () => {
+describe('User API Integration Test', () => {
   let userId;
 
-  it('Create a user and check if it exists', async () => {
+  // Test 1 - Create an account, and using the GET call, validate account exists.
+  it('Test 1 - Create an account, and using the GET call, validate account exists', async () => {
     const createUserResponse = await supertest(app)
       .post('/v1/user')
       .send({
@@ -33,16 +34,18 @@ describe('User API Integration Tests', () => {
     // Test to retrieve the created user
     const getUserResponse = await supertest(app)
       .get(`/v1/user/self`)
-      .set('Authorization', `Basic ${Buffer.from('jane.doe@example.com:abcd').toString('base64')}`); // Mocking basic auth headers
+      .set('Authorization', `Basic ${Buffer.from('jane.doe@example.com:abcd').toString('base64')}`);
     assert.strictEqual(getUserResponse.status, 200);
     assert.strictEqual(getUserResponse.body.id, userId);
   });
 
-  it('Update user details and validate it was updated', async () => {
+  //Test 2 - Update the account and using the GET call, validate the account was updated.
+  it('Test 2 - Update the account and using the GET call, validate the account was updated', async () => {
     // Update the user created in the previous test
+    // Updating first_name and password in this step
     const updateUserResponse = await supertest(app)
       .put('/v1/user/self')
-      .set('Authorization', `Basic ${Buffer.from('jane.doe@example.com:abcd').toString('base64')}`) // Mocking basic auth headers
+      .set('Authorization', `Basic ${Buffer.from('jane.doe@example.com:abcd').toString('base64')}`)
       .send({
         "first_name": "JaneUpdated",
         "last_name": "Doe",
@@ -51,16 +54,17 @@ describe('User API Integration Tests', () => {
     assert.strictEqual(updateUserResponse.status, 204);
 
     // Test to retrieve the user after updates
+    // checking if the authorization works with the updated password and for the same user.
     const getUserResponse = await supertest(app)
       .get(`/v1/user/self`)
-      .set('Authorization', `Basic ${Buffer.from('jane.doe@example.com:abcd1').toString('base64')}`); // Mocking basic auth headers
+      .set('Authorization', `Basic ${Buffer.from('jane.doe@example.com:abcd1').toString('base64')}`);
     assert.strictEqual(getUserResponse.status, 200);
     assert.strictEqual(getUserResponse.body.id, userId);
   });
 });
 
- // Run sequelize.close() after finishing the tests
- after(async () => {
+// Run sequelize.close() after finishing the tests
+after(async () => {
   try {
     await sequelize.close();
     console.log('Database connection closed successfully');
