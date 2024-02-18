@@ -28,7 +28,7 @@ sudo systemctl start postgresql
 sudo systemctl status postgresql
 echo "postgres service is setup succesfully"
 
-Setup the Postgres db
+#Setup the Postgres db
 sudo -i -u postgres psql -c "ALTER USER postgres WITH PASSWORD 'postgres';"
 sudo -i -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE postgres TO postgres;"
 sudo -i -u postgres psql -c "GRANT ALL ON SCHEMA public TO postgres;"

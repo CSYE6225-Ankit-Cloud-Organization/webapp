@@ -6,7 +6,8 @@ sudo useradd -s /usr/sbin/nologin -g csye6225 -d /opt/csye6225 -m csye6225
 cd /opt || exit
 sudo unzip webapp.zip -d csye6225
 sudo chmod o+rx /opt/csye6225
-cd ./csye6225/webapp || exit
+pwd
+cd /opt/csye6225/webapp || exit
 # cd webapp || exit
 # sudo -u csye6225 bash
 # cd ./csye6225/webapp || exit
