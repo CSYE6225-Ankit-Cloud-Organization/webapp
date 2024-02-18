@@ -38,12 +38,12 @@ packer {
 }
 
 source "googlecompute" "gmi" {
-  project_id          = var.project_id
-  source_image_family = var.source_image_family
-  zone                = var.zone
-  ssh_username        = var.ssh_username
-  machine_type        = "e2-small"
-  image_name          = var.image_name
+  project_id            = var.project_id
+  source_image_family   = var.source_image_family
+  zone                  = var.zone
+  ssh_username          = var.ssh_username
+  machine_type          = "e2-small"
+  image_name            = var.image_name
   service_account_email = "packer@csye6225-ankit-cloud-413805.iam.gserviceaccount.com"
 }
 
