@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "Enabling the REST API Service"
+echo "Enabling npm start service"
 sudo systemctl daemon-reload
 sudo systemctl enable startnode
 sudo systemctl start startnode
