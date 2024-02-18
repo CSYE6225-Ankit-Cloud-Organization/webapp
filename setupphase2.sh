@@ -12,11 +12,11 @@ cd ./csye6225/webapp || exit
 # cd ./csye6225/webapp || exit
 sudo npm install
 
-sudo sh -c 'echo "DB_PORT=5432" >> /opt/csye6225/webapp/.env'
-sudo sh -c 'echo "APP_PORT=6225" >> /opt/csye6225/webapp/.env'
-sudo sh -c 'echo "DB_HOSTNAME=localhost" >> /opt/csye6225/webapp/.env'
-sudo sh -c 'echo "DB_PASSWORD=postgres" >> /opt/csye6225/webapp/.env'
-sudo sh -c 'echo "DB_USER=postgres" >> /opt/csye6225/webapp/.env'
-sudo sh -c 'echo "DB_NAME=postgres" >> /opt/csye6225/webapp/.env'
-sudo sh -c 'echo "DB_DIALECT=postgres" >> /opt/csye6225/webapp/.env'
+# sudo sh -c 'echo "DB_PORT=5432" >> /opt/csye6225/webapp/.env'
+# sudo sh -c 'echo "APP_PORT=6225" >> /opt/csye6225/webapp/.env'
+# sudo sh -c 'echo "DB_HOSTNAME=localhost" >> /opt/csye6225/webapp/.env'
+# sudo sh -c 'echo "DB_PASSWORD=postgres" >> /opt/csye6225/webapp/.env'
+# sudo sh -c 'echo "DB_USER=postgres" >> /opt/csye6225/webapp/.env'
+# sudo sh -c 'echo "DB_NAME=postgres" >> /opt/csye6225/webapp/.env'
+# sudo sh -c 'echo "DB_DIALECT=postgres" >> /opt/csye6225/webapp/.env'
 
