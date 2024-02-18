@@ -7,7 +7,8 @@ cd /opt || exit
 sudo unzip webapp.zip -d csye6225
 sudo chmod o+rx /opt/csye6225
 pwd
-cd csye6225/webapp || exit
+ls -al /opt/csye6225
+cd csye6225/webapp-main || exit
 # cd webapp || exit
 # sudo -u csye6225 bash
 # cd ./csye6225/webapp || exit
