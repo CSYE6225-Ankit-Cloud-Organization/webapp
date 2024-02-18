@@ -1,0 +1,36 @@
+name: Validate Packer Template
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  validate-packertemplate:
+    name: Validate Packer Template
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    
+    - name: Create Zip Archive
+      run: |
+        zip -r webapp.zip ./
+    
+    - name: Set up Packer
+      run: |
+        wget https://releases.hashicorp.com/packer/1.7.3/packer_1.7.3_linux_amd64.zip
+        unzip packer_1.7.3_linux_amd64.zip
+        chmod +x packer
+        sudo mv packer /usr/local/bin/
+      shell: bash
+    
+    - name: Initialize Packer
+      run: packer init gcp.pkr.hcl
+
+    - name: Format Packer Template
+      run: packer fmt -check=true gcp.pkr.hcl
+
+    - name: Validate Packer Template
+      run: packer validate gcp.pkr.hcl
