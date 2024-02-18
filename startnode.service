@@ -1,0 +1,15 @@
+[Unit]
+Description=To Run Node.js Application
+After=network.target cloud-init.service
+Wants=cloud-init.service
+
+[Service]
+EnvironmentFile=/opt/csye6225/webapp/.env
+Type=simple
+User=csye6225
+ExecStart=/usr/bin/node /opt/csye6225/webapp/server.js
+Restart=always
+WorkingDirectory=/opt/csye6225/webapp
+
+[Install]
+WantedBy=multi-user.target

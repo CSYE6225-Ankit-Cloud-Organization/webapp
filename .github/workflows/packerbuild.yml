@@ -1,0 +1,80 @@
+name: Build Google Image
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  packerbuild-googleimage:
+    name: Build Google Machine Image
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: 'postgres:latest'
+        env:
+          POSTGRES_DB: ${{ secrets.PGDATABASE }}
+          POSTGRES_USER: ${{ secrets.PGUSER }}
+          POSTGRES_PASSWORD: ${{ secrets.PGPASSWORD }}
+          POSTGRES_PORT: ${{ secrets.PGPORT }}
+          POSTGRES_HOST: ${{ secrets.PGHOST }}
+          DB_DIALECT: 'postgres'
+        ports:
+          - '5432:5432'
+        options: >-
+          --health-cmd pg_isready --health-interval 10s --health-timeout 5s
+          --health-retries 5
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+          node-version: 20.6
+          cache: 'npm'
+
+    - name: Install dependencies
+      run: npm install
+        
+    - name: Display .env file
+      run: |
+        echo APP_PORT=${{ vars.APP_ENV }} >> .env
+        echo DB_NAME=${{ secrets.PGDATABASE }} >> .env
+        echo DB_USER=${{ secrets.PGUSER }} >> .env
+        echo DB_PASSWORD=${{ secrets.PGPASSWORD }} >> .env
+        echo DB_PORT=${{ secrets.PGPORT }} >> .env
+        echo DB_HOSTNAME=${{ secrets.PGHOST }} >> .env
+        echo DB_DIALECT=postgres >> .env
+        cat .env
+
+    - name: Run Integration tests
+      run : npm test
+    
+    - name: Create Zip Archive
+      run: |
+        zip -r webapp.zip ./
+    
+    - name: Authenticate with Google Cloud Platform
+      uses: google-github-actions/auth@v2
+      with:
+        credentials_json: ${{ secrets.PACKER_SERVICEACCOUNT_KEY }}
+
+    - name: Set up Cloud SDK
+      uses: google-github-actions/setup-gcloud@v2
+
+    - name: Set up Packer
+      run: |
+        wget https://releases.hashicorp.com/packer/1.7.3/packer_1.7.3_linux_amd64.zip
+        unzip packer_1.7.3_linux_amd64.zip
+        chmod +x packer
+        sudo mv packer /usr/local/bin/
+      shell: bash
+    
+    - name: Initialize Packer
+      run: packer init gcp.pkr.hcl
+
+    - name: Build Machine Image
+      run: packer build gcp.pkr.hcl
