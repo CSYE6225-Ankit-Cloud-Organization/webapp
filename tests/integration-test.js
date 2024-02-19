@@ -57,7 +57,7 @@ describe('User API Integration Test', () => {
     // checking if the authorization works with the updated password and for the same user.
     const getUserResponse = await supertest(app)
       .get(`/v1/user/self`)
-      .set('Authorization', `Basic ${Buffer.from('jane.doe@example.com:abcd1').toString('base64')}`);
+      .set('Authorization', `Basic ${Buffer.from('jane.doe@example.com:abcd').toString('base64')}`);
     assert.strictEqual(getUserResponse.status, 200);
     assert.strictEqual(getUserResponse.body.id, userId);
   });
