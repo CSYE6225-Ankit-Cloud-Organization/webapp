@@ -14,10 +14,6 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
     
-    - name: Create Zip Archive
-      run: |
-        zip -r webapp.zip ./
-    
     - name: Set up Packer
       run: |
         wget https://releases.hashicorp.com/packer/1.7.3/packer_1.7.3_linux_amd64.zip

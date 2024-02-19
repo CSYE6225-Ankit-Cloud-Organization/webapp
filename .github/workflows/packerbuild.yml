@@ -52,6 +52,10 @@ jobs:
 
     - name: Run Integration tests
       run : npm test
+
+    - name: Remove node_modules
+      run: |
+        rm -rf node_modules
     
     - name: Create Zip Archive
       run: |
