@@ -28,6 +28,17 @@ variable "image_name" {
   default = "dev-centos8-image"
 }
 
+variable "machine_type" {
+  type    = string
+  default = "e2-small"
+}
+
+variable "service_account_email" {
+  type    = string
+  default = "packer@csye6225-ankit-cloud-413805.iam.gserviceaccount.com"
+}
+
+
 packer {
   required_plugins {
     googlecompute = {
@@ -42,9 +53,10 @@ source "googlecompute" "gmi" {
   source_image_family   = var.source_image_family
   zone                  = var.zone
   ssh_username          = var.ssh_username
-  machine_type          = "e2-small"
+  machine_type          = var.machine_type
   image_name            = var.image_name
-  service_account_email = "packer@csye6225-ankit-cloud-413805.iam.gserviceaccount.com"
+  image_description     = var.image_description
+  service_account_email = var.service_account_email
 }
 
 build {
