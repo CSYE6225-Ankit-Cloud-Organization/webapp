@@ -27,16 +27,15 @@ jobs:
     #       --health-retries 5
 
     steps:
-
     - name: Adjust Permissions on PostgreSQL Socket File
-      run: psql --version
+      run: |
         sudo service postgresql start
         sudo chmod 700 /var/run/postgresql/.s.PGSQL.5432 || true
         sudo sed -i 's/^\(host.all.*all.\)\(ident\)\(.*\)$/\1md5\3/g' /etc/postgresql/14/main/pg_hba.conf
         sudo systemctl restart postgresql
         sudo systemctl status postgresql
         sudo -i -u postgres psql -c "ALTER USER postgres WITH PASSWORD 'postgres';"
-        echo "postgres service is setup succesfully"
+        echo "PostgreSQL service is setup successfully"
   
     - name: Checkout code
       uses: actions/checkout@v3
