@@ -29,12 +29,12 @@ jobs:
     steps:
 
     - name: Adjust Permissions on PostgreSQL Socket File
-      run: sudo chmod 700 /var/run/postgresql/.s.PGSQL.5432 || true
-          sudo systemctl stop postgresql
+      run: sudo systemctl start postgresql.service 
+          sudo chmod 700 /var/run/postgresql/.s.PGSQL.5432 || true
           sudo sed -i 's/^\(host.all.*all.\)\(ident\)\(.*\)$/\1md5\3/g' /etc/postgresql/14/main/pg_hba.conf
-          sudo systemctl enable postgresql
-          sudo systemctl start postgresql
-          sudo systemctl status postgresql
+          sudo systemctl enable postgresql.service
+          sudo systemctl restart postgresql.service
+          sudo systemctl status postgresql.service
           sudo -i -u postgres psql -c "ALTER USER postgres WITH PASSWORD 'postgres';"
           echo "postgres service is setup succesfully"
   
