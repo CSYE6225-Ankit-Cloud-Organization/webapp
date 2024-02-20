@@ -27,9 +27,6 @@ jobs:
     #       --health-retries 5
 
     steps:
-    
-    - name: Checkout code
-      uses: actions/checkout@v3
 
     - name: Adjust Permissions on PostgreSQL Socket File
       run: sudo chmod 700 /var/run/postgresql/.s.PGSQL.5432 || true
@@ -40,6 +37,9 @@ jobs:
           sudo systemctl status postgresql
           sudo -i -u postgres psql -c "ALTER USER postgres WITH PASSWORD 'postgres';"
           echo "postgres service is setup succesfully"
+  
+    - name: Checkout code
+      uses: actions/checkout@v3
                     
       
     - name: Setup Node.js
