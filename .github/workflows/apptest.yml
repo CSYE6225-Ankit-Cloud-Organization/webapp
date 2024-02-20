@@ -36,6 +36,7 @@ jobs:
         sudo systemctl status postgresql
         sudo -i -u postgres psql -c "ALTER USER postgres WITH PASSWORD 'postgres';"
         echo "PostgreSQL service is setup successfully"
+        echo "dojne"
   
     - name: Checkout code
       uses: actions/checkout@v3
