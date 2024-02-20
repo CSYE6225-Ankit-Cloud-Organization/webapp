@@ -31,7 +31,7 @@ jobs:
     - name: Adjust Permissions on PostgreSQL Socket File
       run: sudo chmod 700 /var/run/postgresql/.s.PGSQL.5432 || true
           sudo systemctl stop postgresql
-          sudo sed -i -E '/^host\s+all\s+all\s+(127\.0\.0\.1\/32|::1\/128)\s+ident$/ s/ident/md5/' /var/lib/pgsql/data/pg_hba.conf
+          sudo sed -i 's/^\(host.all.*all.\)\(ident\)\(.*\)$/\1md5\3/g' /etc/postgresql/14/main/pg_hba.conf
           sudo systemctl enable postgresql
           sudo systemctl start postgresql
           sudo systemctl status postgresql
