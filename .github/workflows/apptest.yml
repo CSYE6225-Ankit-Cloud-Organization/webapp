@@ -10,33 +10,16 @@ jobs:
     name: Integration Test CI
     runs-on: ubuntu-latest
 
-    # services:
-    #   postgres:
-    #     image: 'postgres:latest'
-    #     env:
-    #       POSTGRES_DB: ${{ secrets.PGDATABASE }}
-    #       POSTGRES_USER: ${{ secrets.PGUSER }}
-    #       POSTGRES_PASSWORD: ${{ secrets.PGPASSWORD }}
-    #       POSTGRES_PORT: ${{ secrets.PGPORT }}
-    #       POSTGRES_HOST: ${{ secrets.PGHOST }}
-    #       DB_DIALECT: 'postgres'
-    #     ports:
-    #       - '5432:5432'
-    #     options: >-
-    #       --health-cmd pg_isready --health-interval 10s --health-timeout 5s
-    #       --health-retries 5
-
     steps:
-    - name: Adjust Permissions on PostgreSQL Socket File
+
+    - name: Starting the Postgres Service
       run: |
         sudo service postgresql start
         sudo chmod 700 /var/run/postgresql/.s.PGSQL.5432 || true
         sudo sed -i 's/^\(host.all.*all.\)\(ident\)\(.*\)$/\1md5\3/g' /etc/postgresql/14/main/pg_hba.conf
         sudo systemctl restart postgresql
         sudo systemctl status postgresql
-        sudo -i -u postgres psql -c "ALTER USER postgres WITH PASSWORD 'postgres';"
-        echo "PostgreSQL service is setup successfully"
-        echo "dojne"
+        sudo -i -u postgres psql -c "ALTER USER postgres WITH PASSWORD '${{ secrets.PGPASSWORD }}';"
   
     - name: Checkout code
       uses: actions/checkout@v3
