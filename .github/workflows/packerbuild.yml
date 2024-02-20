@@ -74,4 +74,4 @@ jobs:
       run: packer init gcp.pkr.hcl
 
     - name: Build Machine Image
-      run: packer build -var 'image_name=$IMAGE_NAME' gcp.pkr.hcl
+      run: packer build -var 'image_name=${{ secrets.IMAGE_NAME }}' gcp.pkr.hcl
