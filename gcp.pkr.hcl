@@ -54,10 +54,12 @@ variable "setup_scripts" {
 }
 
 variable "db_username" {
-  type = string
+  type    = string
+  default = "postgres"
 }
 variable "db_password" {
-  type = string
+  type    = string
+  default = "postgres"
 }
 
 

@@ -9,7 +9,7 @@ echo "systemd file copy completed"
 
 
 # Install important packages
-# sudo dnf update -y
+sudo dnf update -y
 sudo dnf module install nodejs:20 -y
 sudo dnf install npm -y
 sudo dnf install unzip -y
