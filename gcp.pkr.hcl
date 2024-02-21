@@ -97,9 +97,9 @@ build {
     source      = var.startnode_source
     destination = var.startnode_destination
   }
-  
+
   provisioner "shell" {
-    scripts = var.setup_script
+    scripts = var.setup_scripts
     environment_vars = [
       "DB_USERNAME = ${var.db_username}",
       "DB_PASSWORD = ${var.db_password}",
