@@ -74,4 +74,8 @@ jobs:
       run: packer init gcp.pkr.hcl
 
     - name: Build Machine Image
-      run: packer build gcp.pkr.hcl
+      run: packer build \
+            -var "db_username=${{ secrets.PGUSER }}" \
+            -var "db_password=${{ secrets.PGPASSWORD }}" \
+            -var "db_name=${{ secrets.PGDATABASE }}" \ 
+            gcp.pkr.hcl
