@@ -63,12 +63,12 @@ describe('User API Integration Test', () => {
   });
 });
 
-// Run sequelize.close() after finishing the tests
-after(async () => {
-  try {
-    await sequelize.close();
-    console.log('Database connection closed successfully');
-  } catch (error) {
-    console.error('Error closing database connection:', error);
-  }
-});
+// // Run sequelize.close() after finishing the tests
+// after(async () => {
+//   try {
+//     await sequelize.close();
+//     console.log('Database connection closed successfully');
+//   } catch (error) {
+//     console.error('Error closing database connection:', error);
+//   }
+// });
