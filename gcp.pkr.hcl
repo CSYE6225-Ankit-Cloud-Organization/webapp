@@ -54,13 +54,13 @@ variable "setup_scripts" {
 }
 
 variable "db_username" {
-  type    = string
+  type = string
 }
 variable "db_password" {
-  type    = string
+  type = string
 }
 variable "db_name" {
-  type    = string
+  type = string
 }
 
 
