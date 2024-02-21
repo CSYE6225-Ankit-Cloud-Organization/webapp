@@ -29,7 +29,11 @@ sudo systemctl status postgresql
 echo "postgres service is setup succesfully"
 
 #Setup the Postgres db
-sudo -i -u postgres psql -c "ALTER USER postgres WITH PASSWORD 'postgres';"
-sudo -i -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE postgres TO postgres;"
-sudo -i -u postgres psql -c "GRANT ALL ON SCHEMA public TO postgres;"
+username=$DB_USERNAME
+password=$DB_PASSWORD
+dbname=$DB_NAME
+
+sudo -i -u postgres psql -c "ALTER USER $username WITH PASSWORD '$password';"
+sudo -i -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE $dbname TO $username;"
+sudo -i -u postgres psql -c "GRANT ALL ON SCHEMA public TO $username;"
 echo "postgres db commands executed successfully"

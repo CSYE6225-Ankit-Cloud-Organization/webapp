@@ -53,6 +53,20 @@ variable "setup_scripts" {
   default = ["./setup.sh", "./setupphase2.sh", "./ownership.sh", "./systemD.sh"]
 }
 
+variable "db_username" {
+  type    = string
+  default = "postgres"
+}
+variable "db_password" {
+  type    = string
+  default = "postgres"
+}
+variable "db_name" {
+  type    = string
+  default = "postgres"
+}
+
+
 packer {
   required_plugins {
     googlecompute = {
@@ -83,8 +97,13 @@ build {
     source      = var.startnode_source
     destination = var.startnode_destination
   }
-
+  
   provisioner "shell" {
-    scripts = var.setup_scripts
+    scripts = var.setup_script
+    environment_vars = [
+      "DB_USERNAME = ${var.db_username}",
+      "DB_PASSWORD = ${var.db_password}",
+      "DB_NAME     = ${var.db_name}"
+    ]
   }
 }

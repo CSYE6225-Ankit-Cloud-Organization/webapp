@@ -10,4 +10,5 @@ pwd
 ls -al /opt/csye6225
 cd /opt/csye6225 || exit
 sudo npm install
+sudo rm -rf .git
 
