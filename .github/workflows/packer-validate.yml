@@ -34,9 +34,6 @@ jobs:
 
     - name: Validate Packer Template
       run: |
-        packer validate \
-          -var "db_username=${{ secrets.PGUSER }}" \
-          -var "db_password=${{ secrets.PGPASSWORD }}" \
-          gcp.pkr.hcl
+        packer validate gcp.pkr.hcl
 
 
