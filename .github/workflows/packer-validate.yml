@@ -33,4 +33,8 @@ jobs:
       run: packer fmt -check=true gcp.pkr.hcl
 
     - name: Validate Packer Template
-      run: packer validate gcp.pkr.hcl
+      run: packer validate \
+            -var "db_username=${{ secrets.PGUSER }}" \
+            -var "db_password=${{ secrets.PGPASSWORD }}" \
+            -var "db_name=${{ secrets.PGDATABASE }}" \ 
+            gcp.pkr.hcl
