@@ -63,12 +63,12 @@ packer {
 }
 
 source "googlecompute" "gmi" {
-  project_id            = var.project_id
-  source_image_family   = var.source_image_family
-  zone                  = var.zone
-  ssh_username          = var.ssh_username
-  machine_type          = var.machine_type
-  image_description     = var.image_description
+  project_id          = var.project_id
+  source_image_family = var.source_image_family
+  zone                = var.zone
+  ssh_username        = var.ssh_username
+  machine_type        = var.machine_type
+  image_description   = var.image_description
 }
 
 build {
