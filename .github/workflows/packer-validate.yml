@@ -34,6 +34,9 @@ jobs:
 
     - name: Validate Packer Template
       run: |
-        packer validate gcp.pkr.hcl
+        packer validate \
+          -var "project_id=${{ secrets.PROJECTID }}" \
+          -var "zone=${{ secrets.ZONE }}" \
+          gcp.pkr.hcl
 
 

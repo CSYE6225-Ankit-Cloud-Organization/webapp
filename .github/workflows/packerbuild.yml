@@ -75,4 +75,7 @@ jobs:
 
     - name: Build Machine Image
       run: |
-        packer build gcp.pkr.hcl
+        packer build \
+          -var "project_id=${{ secrets.PROJECTID }}" \
+          -var "zone=${{ secrets.ZONE }}" \
+          gcp.pkr.hcl
