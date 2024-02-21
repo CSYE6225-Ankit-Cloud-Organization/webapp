@@ -59,9 +59,6 @@ variable "db_username" {
 variable "db_password" {
   type = string
 }
-variable "db_name" {
-  type = string
-}
 
 
 packer {
@@ -100,7 +97,6 @@ build {
     environment_vars = [
       "DB_USERNAME=${var.db_username}",
       "DB_PASSWORD=${var.db_password}",
-      "DATABASE_NAME=${var.db_name}",
     ]
   }
 }
