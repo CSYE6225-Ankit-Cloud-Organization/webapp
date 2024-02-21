@@ -78,5 +78,4 @@ jobs:
         packer build \
           -var "db_username=${{ secrets.PGUSER }}" \
           -var "db_password=${{ secrets.PGPASSWORD }}" \
-          -var "db_name=${{ secrets.PGDATABASE }}" \
           gcp.pkr.hcl
