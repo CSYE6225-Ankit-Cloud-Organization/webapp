@@ -23,21 +23,35 @@ variable "image_description" {
   default = "Custom CentOS 8 image with webapp and services installed"
 }
 
-variable "image_name" {
-  type    = string
-  default = "dev-centos8-image"
-}
-
 variable "machine_type" {
   type    = string
   default = "e2-small"
 }
 
-variable "service_account_email" {
+variable "webapp_source" {
   type    = string
-  default = "packer@csye6225-ankit-cloud-413805.iam.gserviceaccount.com"
+  default = "webapp.zip"
 }
 
+variable "startnode_source" {
+  type    = string
+  default = "startnode.service"
+}
+
+variable "webapp_destination" {
+  type    = string
+  default = "/tmp/webapp.zip"
+}
+
+variable "startnode_destination" {
+  type    = string
+  default = "/tmp/startnode.service"
+}
+
+variable "setup_scripts" {
+  type    = list(string)
+  default = ["./setup.sh", "./setupphase2.sh", "./ownership.sh", "./systemD.sh"]
+}
 
 packer {
   required_plugins {
@@ -54,30 +68,23 @@ source "googlecompute" "gmi" {
   zone                  = var.zone
   ssh_username          = var.ssh_username
   machine_type          = var.machine_type
-  image_name            = var.image_name
   image_description     = var.image_description
-  service_account_email = var.service_account_email
 }
 
 build {
   sources = ["source.googlecompute.gmi"]
 
   provisioner "file" {
-    source      = "webapp.zip"
-    destination = "/tmp/webapp.zip"
+    source      = var.webapp_source
+    destination = var.webapp_destination
   }
 
   provisioner "file" {
-    source      = "startnode.service"
-    destination = "/tmp/startnode.service"
+    source      = var.startnode_source
+    destination = var.startnode_destination
   }
 
   provisioner "shell" {
-    scripts = [
-      "./setup.sh",
-      "./setupphase2.sh",
-      "./ownership.sh",
-      "./systemD.sh"
-    ]
+    scripts = var.setup_scripts
   }
 }
