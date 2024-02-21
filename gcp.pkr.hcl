@@ -101,9 +101,9 @@ build {
   provisioner "shell" {
     scripts = var.setup_scripts
     environment_vars = [
-      "DB_USERNAME = ${var.db_username}",
-      "DB_PASSWORD = ${var.db_password}",
-      "DB_NAME     = ${var.db_name}"
+      "DB_USERNAME=${var.db_username}",
+      "DB_PASSWORD=${var.db_password}",
+      "DATABASE_NAME=${var.db_name}",
     ]
   }
 }
