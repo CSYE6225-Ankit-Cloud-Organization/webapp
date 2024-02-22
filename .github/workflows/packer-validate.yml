@@ -37,6 +37,7 @@ jobs:
         packer validate \
           -var "project_id=${{ secrets.PROJECTID }}" \
           -var "zone=${{ secrets.ZONE }}" \
+          -var "source_image_family=${{ secrets.IMAGEFAMILY }}" \
           gcp.pkr.hcl
 
 
