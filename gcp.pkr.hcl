@@ -17,7 +17,7 @@ variable "ssh_username" {
   default = "packer"
 }
 
-variable "image_description"   {
+variable "image_description" {
   type    = string
   default = "Custom CentOS 8 image with webapp and services installed"
 }
@@ -75,7 +75,7 @@ source "googlecompute" "gmi" {
   project_id          = var.project_id
   source_image_family = var.source_image_family
   zone                = var.zone
-  ssh_username        = var.ssh_username
+  ssh_username        = var.ssh_usernam
   machine_type        = var.machine_type
   image_description   = var.image_description
 }
