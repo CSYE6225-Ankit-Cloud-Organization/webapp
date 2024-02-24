@@ -17,7 +17,7 @@ variable "ssh_username" {
   default = "packer"
 }
 
-variable "image_description" {
+variable "image_description"   {
   type    = string
   default = "Custom CentOS 8 image with webapp and services installed"
 }
