@@ -1,5 +1,6 @@
 variable "project_id" {
-  type = string
+  type    = string
+  default = "csye6225-ankit-cloud-413805"
 }
 
 variable "source_image_family" {
