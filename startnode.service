@@ -1,10 +1,10 @@
 [Unit]
 Description=To Run Node.js Application
+ConditionPathExists=/opt/csye6225/.env
 After=network.target cloud-init.service
 Wants=cloud-init.service
 
 [Service]
-EnvironmentFile=/opt/csye6225/.env
 Type=simple
 User=csye6225
 Group=csye6225
