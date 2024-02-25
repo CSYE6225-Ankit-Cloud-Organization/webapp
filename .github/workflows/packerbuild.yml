@@ -29,9 +29,13 @@ jobs:
           node-version: 20.6
           cache: 'npm'
 
+    - name: Create Zip Archive
+      run: |
+        zip -r webapp.zip ./
+
     - name: Install dependencies
       run: npm install
-        
+
     - name: Display .env file
       run: |
         echo APP_PORT=${{ vars.APP_ENV }} >> .env
@@ -46,13 +50,13 @@ jobs:
     - name: Run Integration tests
       run : npm test
 
-    - name: Remove node_modules
-      run: |
-        rm -rf node_modules
+    # - name: Remove node_modules
+    #   run: |
+    #     rm -rf node_modules
     
-    - name: Create Zip Archive
-      run: |
-        zip -r webapp.zip ./
+    # - name: Create Zip Archive
+    #   run: |
+    #     zip -r webapp.zip ./
     
     - name: Authenticate with Google Cloud Platform
       uses: google-github-actions/auth@v2
