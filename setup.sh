@@ -2,9 +2,9 @@
 
 # Copy the zip to current working directory
 sudo whoami
-sudo cp /tmp/webapp.zip /opt/webapp.zip
+sudo mv /tmp/webapp.zip /opt/webapp.zip
 echo "webapp copy completed"
-sudo cp /tmp/startnode.service /etc/systemd/system/startnode.service
+sudo mv /tmp/startnode.service /etc/systemd/system/startnode.service
 echo "systemd file copy completed"
 
 
