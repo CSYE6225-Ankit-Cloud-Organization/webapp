@@ -7,6 +7,8 @@ const User = require('../models/User');
 const dbServices = require('../services/service');
 const saltRounds = 10;
 const userController = {};
+const winston = require('winston');
+const logger = require('./logger.js');
 
 // To create a new user 
 userController.createUser = async (req, res) => {
@@ -59,6 +61,7 @@ userController.createUser = async (req, res) => {
         // check if email already exits in the db or not
         if (findUser) {
             console.log(`username exists already`);
+            logger.error("Attempt to create duplicate user");
             return res.status(400).send();
         }
         else {
@@ -84,6 +87,7 @@ userController.createUser = async (req, res) => {
                 account_created: newUser.account_created,
                 account_updated: newUser.account_updated
             };
+            logger.info("User creation Successfull");
             console.log('user created successfully!!');
             return res.status(201).send(responsePayload);
         }

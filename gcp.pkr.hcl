@@ -38,6 +38,11 @@ variable "startnode_source" {
   default = "startnode.service"
 }
 
+variable "opsagent_config_source" {
+  type    = string
+  default = "config.yaml"
+}
+
 variable "webapp_destination" {
   type    = string
   default = "/tmp/webapp.zip"
@@ -46,6 +51,11 @@ variable "webapp_destination" {
 variable "startnode_destination" {
   type    = string
   default = "/tmp/startnode.service"
+}
+
+variable "opsagent_config_destination" {
+  type    = string
+  default = "/tmp/config.yaml"
 }
 
 variable "setup_scripts" {
@@ -92,6 +102,11 @@ build {
   provisioner "file" {
     source      = var.startnode_source
     destination = var.startnode_destination
+  }
+
+  provisioner "file" {
+    source      = var.opsagent_config_source
+    destination = var.opsagent_config_destination
   }
 
   provisioner "shell" {
