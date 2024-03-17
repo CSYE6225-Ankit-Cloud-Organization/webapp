@@ -8,7 +8,7 @@ const dbServices = require('../services/service');
 const saltRounds = 10;
 const userController = {};
 const winston = require('winston');
-const logger = require('./logger.js');
+const logger = require('../../logger.js');
 
 // To create a new user 
 userController.createUser = async (req, res) => {

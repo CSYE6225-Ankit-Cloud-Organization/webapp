@@ -1,6 +1,6 @@
 const { createLogger, format, transports } = require('winston');
 require('dotenv').config();
-const logFilePath = process.env.LOG_FILE_PATH || '/var/log/webapp/webapp.log';
+const logFilePath = process.env.LOG_FILE_PATH || 'webapp.log';
 
 const logger = createLogger({
     transports: [
