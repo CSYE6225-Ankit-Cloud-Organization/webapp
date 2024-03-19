@@ -6,12 +6,18 @@ const logger = require('./logger.js');
 const sequelize = require('./src/config/dbConnection');
 const User = require('./src/models/User'); // Import the User model
 
+// Testing all error types for Google Ops Agent
+logger.debug('testing debug message');
+logger.info('testing info message');
+logger.warn('testing warn message');
+logger.error('testing error message');
+
 sequelize.sync({ alter: true }).then(() => {
     console.log('Database synced successfully');
 })
 
     .catch((error) => {
-        logger.error('Error syncing database');
+        logger.error('Error syncing database',error);
         console.error('Error syncing database');
     });
 

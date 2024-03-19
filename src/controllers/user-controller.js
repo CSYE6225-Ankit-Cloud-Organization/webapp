@@ -61,7 +61,7 @@ userController.createUser = async (req, res) => {
         // check if email already exits in the db or not
         if (findUser) {
             console.log(`username exists already`);
-            logger.error("Attempt to create duplicate user");
+            logger.error('Attempt to create duplicate user');
             return res.status(400).send();
         }
         else {
@@ -92,6 +92,7 @@ userController.createUser = async (req, res) => {
             return res.status(201).send(responsePayload);
         }
     } catch (error) {
+        logger.error('Error creating user', error);
         console.error('Error creating user:', error.message);
         return res.status(500).send('Server side issues');
     }
