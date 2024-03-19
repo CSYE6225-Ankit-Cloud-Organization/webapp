@@ -3,6 +3,7 @@ require('dotenv').config();
 const logFilePath = process.env.LOG_FILE_PATH || 'webapp.log';
 
 const logger = createLogger({
+    level: 'debug',
     transports: [
         new transports.Console(),
         new transports.File({
