@@ -5,6 +5,7 @@ const app = express();
 require('dotenv').config(); // required to read the .env file
 const route = require('./routes/routes'); // loading module containg routes
 const validations = require('./validators/validator');
+const verifyEmailRouter = require('./routes/verifyemail-route');
 
 app.use(express.json()); // middleware to parse the json from the request body
 
@@ -14,6 +15,7 @@ app.use((req, res, next) => {
     next();
 });
 // middleware to check if check query parameters are passed by the user
+app.use('/verify',verifyEmailRouter);
 app.use(validations.checkQueryParameters);
 route(app);
 

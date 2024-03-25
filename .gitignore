@@ -131,3 +131,9 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+
+# my custom files
+dummy.js
+mail.js
+pubsub.js

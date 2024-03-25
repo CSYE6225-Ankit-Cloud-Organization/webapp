@@ -5,6 +5,7 @@ const winston = require('winston');
 const logger = require('./logger.js');
 const sequelize = require('./src/config/dbConnection');
 const User = require('./src/models/User'); // Import the User model
+const Email = require('./src/models/Verifyemail.js'); // Import the Verifyemail model
 
 // Testing all error types for Google Ops Agent
 logger.debug('testing debug message');
