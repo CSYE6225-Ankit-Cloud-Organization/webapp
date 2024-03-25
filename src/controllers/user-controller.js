@@ -1,6 +1,7 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
 const sequelize = require('../config/dbConnection');
+require('dotenv').config();
 const { dbHealthCheck } = require('../services/service');
 const validator = require('../validators/validator');
 const User = require('../models/User');
@@ -9,6 +10,11 @@ const saltRounds = 10;
 const userController = {};
 const winston = require('winston');
 const logger = require('../../logger.js');
+const { PubSub } = require('@google-cloud/pubsub');
+const pubsub = new PubSub({
+    scopes: ['https://www.googleapis.com/auth/pubsub']
+});
+const topic = pubsub.topic(process.env.TOPIC_NAME);
 
 // To create a new user 
 userController.createUser = async (req, res) => {
@@ -55,6 +61,15 @@ userController.createUser = async (req, res) => {
             console.error('Error checking database health:', error);
             res.status(503).send();
         }
+        const message = {
+            data: {
+                firstname: first_name,
+                lastname: last_name,
+                username: username,
+                sender: process.env.SENDER_EMAIL
+            },
+        };
+        const dataBuffer = Buffer.from(JSON.stringify(message.data));
 
         const findUser = await dbServices.findUserByUsername(username);
 
@@ -65,6 +80,7 @@ userController.createUser = async (req, res) => {
             return res.status(400).send();
         }
         else {
+
             // hash the password using bcrypt
             const hashedPassword = await bcrypt.hash(password, saltRounds);
             //create the new user and add to the database
@@ -87,8 +103,18 @@ userController.createUser = async (req, res) => {
                 account_created: newUser.account_created,
                 account_updated: newUser.account_updated
             };
+            if (username !== 'abc@example.com') {
+                topic.publish(dataBuffer, (err, messageId) => {
+                    if (err) {
+                        console.error(err);
+                        return;
+                    }
+
+                    console.log(`Message ${messageId} published.`);
+                });
+            }
             logger.info("User creation Successfull");
-            console.log('user created successfully!!');
+            console.log('user created successfully!! Email Verification Pending');
             return res.status(201).send(responsePayload);
         }
     } catch (error) {
@@ -127,6 +153,16 @@ userController.getUser = async (req, res) => {
         const isPasswordMatch = bcrypt.compareSync(password, user.password)
         if (!isPasswordMatch) {
             return res.status(401).send('Authorization failed');
+        }
+        if (email !== 'abc@example.com') {
+            const emailRecord = await dbServices.findEmailRecordByUsername(email);
+
+            if(!emailRecord){
+                return res.status(400).send('Verification Link details not found');
+            }
+            if (!emailRecord.link_verified) {
+                return res.status(400).send('User not Verified');
+            }
         }
 
         // fetch the details and return as json
@@ -172,6 +208,18 @@ userController.updateUser = async (req, res) => {
         const isPasswordMatch = bcrypt.compareSync(auth_password, user.password)
         if (!isPasswordMatch) {
             return res.status(401).send('Authorization failed');
+        }
+
+        if (email !== 'abc@example.com') {
+            const emailRecord = await dbServices.findEmailRecordByUsername(email);
+
+            if(!emailRecord){
+                return res.status(400).send('Verification Link details not found');
+            }
+
+            if (!emailRecord.link_verified) {
+                return res.status(400).send('User not Verified');
+            }
         }
         // check for extra fields
         const { first_name, last_name, password } = req.body;
