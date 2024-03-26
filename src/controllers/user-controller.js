@@ -77,7 +77,7 @@ userController.createUser = async (req, res) => {
         if (findUser) {
             console.log(`username exists already`);
             logger.error('Attempt to create duplicate user');
-            return res.status(400).send();
+            return res.status(400).send('This user already exists in our database..');
         }
         else {
 
@@ -103,7 +103,7 @@ userController.createUser = async (req, res) => {
                 account_created: newUser.account_created,
                 account_updated: newUser.account_updated
             };
-            if (username !== 'abc@example.com') {
+            if (username !== process.env.TEST_USER) {
                 topic.publish(dataBuffer, (err, messageId) => {
                     if (err) {
                         console.error(err);
@@ -154,7 +154,7 @@ userController.getUser = async (req, res) => {
         if (!isPasswordMatch) {
             return res.status(401).send('Authorization failed');
         }
-        if (email !== 'abc@example.com') {
+        if (email !== process.env.TEST_USER) {
             const emailRecord = await dbServices.findEmailRecordByUsername(email);
 
             if(!emailRecord){
@@ -210,7 +210,7 @@ userController.updateUser = async (req, res) => {
             return res.status(401).send('Authorization failed');
         }
 
-        if (email !== 'abc@example.com') {
+        if (email !== process.env.TEST_USER) {
             const emailRecord = await dbServices.findEmailRecordByUsername(email);
 
             if(!emailRecord){
