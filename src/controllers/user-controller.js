@@ -106,7 +106,7 @@ userController.createUser = async (req, res) => {
                 account_created: newUser.account_created,
                 account_updated: newUser.account_updated
             };
-            if (username !== 'abc@example.com') {
+            if (username !== process.env.TEST_USER) {
                 topic.publish(dataBuffer, (err, messageId) => {
                     if (err) {
                         console.error(err);
@@ -157,7 +157,7 @@ userController.getUser = async (req, res) => {
         if (!isPasswordMatch) {
             return res.status(401).send('Authorization failed');
         }
-        if (email !== 'abc@example.com') {
+        if (email !== process.env.TEST_USER) {
             const emailRecord = await dbServices.findEmailRecordByUsername(email);
 
             if(!emailRecord){
@@ -213,7 +213,7 @@ userController.updateUser = async (req, res) => {
             return res.status(401).send('Authorization failed');
         }
 
-        if (email !== 'abc@example.com') {
+        if (email !== process.env.TEST_USER) {
             const emailRecord = await dbServices.findEmailRecordByUsername(email);
 
             if(!emailRecord){
