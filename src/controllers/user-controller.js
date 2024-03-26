@@ -11,14 +11,14 @@ const userController = {};
 const winston = require('winston');
 const logger = require('../../logger.js');
 const { PubSub } = require('@google-cloud/pubsub');
-try{
-const pubsub = new PubSub({
-    scopes: ['https://www.googleapis.com/auth/pubsub']
-});
-const topic = pubsub.topic(process.env.TOPIC_NAME);
-}catch{
-    console.log("something happened");
-}
+// try{
+// const pubsub = new PubSub({
+//     scopes: ['https://www.googleapis.com/auth/pubsub']
+// });
+// const topic = pubsub.topic(process.env.TOPIC_NAME);
+// }catch{
+//     console.log("something happened");
+// }
 // To create a new user 
 userController.createUser = async (req, res) => {
 
@@ -107,6 +107,10 @@ userController.createUser = async (req, res) => {
                 account_updated: newUser.account_updated
             };
             if (username !== 'abc@example.com') {
+                const pubsub = new PubSub({
+                    scopes: ['https://www.googleapis.com/auth/pubsub']
+                });
+                const topic = pubsub.topic(process.env.TOPIC_NAME);
                 topic.publish(dataBuffer, (err, messageId) => {
                     if (err) {
                         console.error(err);
