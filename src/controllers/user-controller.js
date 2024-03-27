@@ -161,7 +161,7 @@ userController.getUser = async (req, res) => {
                 return res.status(400).send('Verification Link details not found');
             }
             if (!emailRecord.link_verified) {
-                return res.status(400).send('User not Verified');
+                return res.status(403).send('User not Verified');
             }
         }
 
@@ -218,7 +218,7 @@ userController.updateUser = async (req, res) => {
             }
 
             if (!emailRecord.link_verified) {
-                return res.status(400).send('User not Verified');
+                return res.status(403).send('User not Verified');
             }
         }
         // check for extra fields
