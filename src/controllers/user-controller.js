@@ -11,14 +11,7 @@ const userController = {};
 const winston = require('winston');
 const logger = require('../../logger.js');
 const { PubSub } = require('@google-cloud/pubsub');
-// try{
-// const pubsub = new PubSub({
-//     scopes: ['https://www.googleapis.com/auth/pubsub']
-// });
-// const topic = pubsub.topic(process.env.TOPIC_NAME);
-// }catch{
-//     console.log("something happened");
-// }
+
 // To create a new user 
 userController.createUser = async (req, res) => {
 
