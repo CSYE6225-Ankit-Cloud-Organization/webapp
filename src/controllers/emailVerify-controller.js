@@ -32,10 +32,10 @@ const verifyUser = async (req, res) => {
 
         if (result.token === token && result.username === email) {
             const currentTime = new Date();
-            const linkCreatedAt = result.link_created_at;
-            const timeDifferenceInMillis = currentTime - linkCreatedAt;
-            const timeDifferenceInMinutes = timeDifferenceInMillis / (1000 * 60);
-            if (timeDifferenceInMinutes <= 2) {
+            const expiryTime = result.link_expiry_at;
+            // const timeDifferenceInMillis = currentTime - linkCreatedAt;
+            // const timeDifferenceInMinutes = timeDifferenceInMillis / (1000 * 60);
+            if (currentTime <= expiryTime) {
 
                 if (result.link_verified === false) {
                     result.link_verified = true;
