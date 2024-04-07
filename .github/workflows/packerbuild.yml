@@ -95,7 +95,7 @@ jobs:
           --network-interface=network-tier=${{ secrets.TEMPLATE_NETWORK_TIER }},subnet=${{ secrets.TEMPLATE_SUBNET }} \
           --service-account=${{ secrets.TEMPLATE_SERVICE_ACCOUNT }} \
           --scopes=${{ secrets.TEMPLATE_SCOPES }} \
-          --instance-template-region=${{ secrets.TEMPLATE_REGION }} \
+          --region=${{ secrets.TEMPLATE_REGION }} \
           --metadata=startup-script=${{ secrets.TEMPLATE_SCRIPT }}
       env:
           latest_image: ${{ steps.get-image-id.outputs.image_id }}
