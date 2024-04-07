@@ -68,16 +68,16 @@ jobs:
         sudo mv packer /usr/local/bin/
       shell: bash
     
-    - name: Initialize Packer
-      run: packer init gcp.pkr.hcl
+    # - name: Initialize Packer
+    #   run: packer init gcp.pkr.hcl
 
-    - name: Build Machine Image
-      run: |
-        packer build \
-          -var "project_id=${{ secrets.PROJECTID }}" \
-          -var "zone=${{ secrets.ZONE }}" \
-          -var "source_image_family=${{ secrets.IMAGEFAMILY }}" \
-          gcp.pkr.hcl
+    # - name: Build Machine Image
+    #   run: |
+    #     packer build \
+    #       -var "project_id=${{ secrets.PROJECTID }}" \
+    #       -var "zone=${{ secrets.ZONE }}" \
+    #       -var "source_image_family=${{ secrets.IMAGEFAMILY }}" \
+    #       gcp.pkr.hcl
     
     - name: Get latest machine image ID
       id: get-image-id
