@@ -83,6 +83,7 @@ jobs:
       id: get-image-id
       run: |
         latest_image=$(gcloud compute images list --format="value(name)" --filter="name:packer-*" --sort-by="~creationTimestamp" --limit=1) \
+        latest_image="projects/csye6225-ankit-cloud-413805/global/images/$latest_image"
         echo "::set-output name=image_id::$latest_image"
     
     - name: Create Instance Template
