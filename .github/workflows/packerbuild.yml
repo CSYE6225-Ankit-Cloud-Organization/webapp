@@ -78,3 +78,41 @@ jobs:
           -var "zone=${{ secrets.ZONE }}" \
           -var "source_image_family=${{ secrets.IMAGEFAMILY }}" \
           gcp.pkr.hcl
+    
+    - name: Get latest machine image ID
+      id: get-image-id
+      run: |
+        latest_image=$(gcloud compute images list --format="value(name)" --filter="name:packer-*" --sort-by="~creationTimestamp" --limit=1) \
+        echo "::set-output name=image_id::$latest_image"
+    
+    - name: Create Instance Template
+      run: |
+        gcloud compute instance-templates create cyse-demovm1 \
+          --create-disk=image=${latest_image},size=20,type=pd-balanced,auto-delete=yes,boot=yes,kms-key=projects/csye6225-ankit-cloud-413805/locations/us-central1/keyRings/webapp-keyring/cryptoKeys/webapp-vm-key \
+          --machine-type=e2-medium \
+          --can-ip-forward \
+          --tags=webapp-resource \
+          --network-interface=network-tier=STANDARD,subnet=https://www.googleapis.com/compute/beta/projects/csye6225-ankit-cloud-413805/regions/us-central1/subnetworks/webapp \
+          --service-account=logging-serviceaccount@csye6225-ankit-cloud-413805.iam.gserviceaccount.com \
+          --scopes=https://www.googleapis.com/auth/devstorage.read_only,https://www.googleapis.com/auth/logging.write,https://www.googleapis.com/auth/monitoring.write,https://www.googleapis.com/auth/pubsub,https://www.googleapis.com/auth/service.management.readonly,https://www.googleapis.com/auth/servicecontrol,https://www.googleapis.com/auth/trace.append \
+          --instance-template-region=us-central1
+      env:
+          latest_image: ${{ steps.get-image-id.outputs.image_id }}
+    
+    - name: Set Instance Template for Managed Instance Group
+      run: |
+        gcloud compute instance-groups managed set-instance-template appserver-igm \
+          --template=projects/csye6225-ankit-cloud-413805/regions/us-central1/instanceTemplates/cyse-demovm1 \
+          --region=us-central1
+
+    # - name: Recreate Instances in Managed Instance Group
+    #   run: |
+    #     gcloud compute instance-groups managed rolling-action replace appserver-igm \
+    #       --max-surge=3 \
+    #       --max-unavailable=0 \
+    #       --region=us-central1
+    
+    # - name: Wait for Substitution of instances in MIG
+    #   run: |
+    #     gcloud compute instance-groups managed wait-until --stable appserver-igm \
+    #       --region=us-central1
