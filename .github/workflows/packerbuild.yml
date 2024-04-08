@@ -68,16 +68,16 @@ jobs:
         sudo mv packer /usr/local/bin/
       shell: bash
     
-    # - name: Initialize Packer
-    #   run: packer init gcp.pkr.hcl
+    - name: Initialize Packer
+      run: packer init gcp.pkr.hcl
 
-    # - name: Build Machine Image
-    #   run: |
-    #     packer build \
-    #       -var "project_id=${{ secrets.PROJECTID }}" \
-    #       -var "zone=${{ secrets.ZONE }}" \
-    #       -var "source_image_family=${{ secrets.IMAGEFAMILY }}" \
-    #       gcp.pkr.hcl
+    - name: Build Machine Image
+      run: |
+        packer build \
+          -var "project_id=${{ secrets.PROJECTID }}" \
+          -var "zone=${{ secrets.ZONE }}" \
+          -var "source_image_family=${{ secrets.IMAGEFAMILY }}" \
+          gcp.pkr.hcl
     
     - name: Get latest machine image ID
       id: get-image-id
@@ -125,14 +125,14 @@ jobs:
     - name: Set Instance Template for Managed Instance Group
       run: |
         gcloud compute instance-groups managed set-instance-template ${{ secrets.TEMPLATE_MIG_NAME }} \
-          --template=projects/csye6225-ankit-cloud-413805/regions/us-central1/instanceTemplates/${{ secrets.TEMPLATE_NAME }} \
+          --template=projects/${{ secrets.PROJECTID }}/regions/${{ secrets.TEMPLATE_REGION }}/instanceTemplates/${{ secrets.TEMPLATE_NAME }} \
           --region=${{ secrets.TEMPLATE_REGION }}
 
     - name: Recreate Instances in Managed Instance Group
       run: |
         gcloud compute instance-groups managed rolling-action replace ${{ secrets.TEMPLATE_MIG_NAME }} \
-          --max-surge=3 \
-          --max-unavailable=0 \
+          --max-surge=${{ secrets.MIG_MAX_SURGE }} \
+          --max-unavailable=${{ secrets.MIG_MAX_UNAVAILABLE }} \
           --region=${{ secrets.TEMPLATE_REGION }}
     
     - name: Wait for Substitution of instances in MIG
