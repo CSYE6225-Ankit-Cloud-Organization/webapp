@@ -96,39 +96,38 @@ jobs:
           --service-account=${{ secrets.TEMPLATE_SERVICE_ACCOUNT }} \
           --scopes=${{ secrets.TEMPLATE_SCOPES }} \
           --region=${{ secrets.TEMPLATE_REGION }} \
-          --metadata=startup-script="#!/bin/bash
-              ENV_FILE=\"/opt/csye6225/.env\"
-              if [ ! -f \"\$ENV_FILE\" ]; then
-                  DB_NAME=\"${{ secrets.TEMPLATE_DB_NAME }}\"
-                  DB_USER=\"${{ secrets.TEMPLATE_DB_USER }}\"
-                  DB_PASSWORD=\"${{ secrets.TEMPLATE_DB_PASSWORD }}\"
-                  DB_HOSTNAME=\"${{ secrets.TEMPLATE_DB_HOSTNAME }}\"
-                  DB_DIALECT=\"${{ secrets.TEMPLATE_DB_DIALECT }}\"
-                  DB_PORT=\"${{ secrets.PGPORT }}\"
-                  APP_PORT=\"${{ secrets.APP_PORT }}\"
-                  LOG_FILE_PATH=\"${{ secrets.LOG_FILE_PATH }}\"
-                  LOG_LEVEL=\"${{ secrets.LOG_LEVEL }}\"
-                  TOPIC_NAME=\"${{ secrets.TOPIC_NAME }}\"
-                  SENDER_EMAIL=\"${{ secrets.SENDER_EMAIL }}\"
-                  LINK_EXPIRATION_TIME_IN_MINUTES=\"${{ secrets.LINK_EXPIRATION_TIME_IN_MINUTES }}\"
+          --metadata=startup-script="
+            ENV_FILE=\"/opt/csye6225/.env\";
+            if [ ! -f \"\$ENV_FILE\" ]; then
+                DB_NAME=\"${{ secrets.DB_NAME }}\";
+                DB_USER=\"${{ secrets.DB_USER }}\";
+                DB_PASSWORD=\"${{ secrets.DB_PASSWORD }}\";
+                DB_HOSTNAME=\"${{ secrets.DB_HOSTNAME }}\";
+                DB_DIALECT=\"${{ secrets.DB_DIALECT }}\";
+                DB_PORT=\"${{ secrets.DB_PORT }}\";
+                APP_PORT=\"${{ secrets.APP_PORT }}\";
+                LOG_FILE_PATH=\"${{ secrets.LOG_FILE_PATH }}\";
+                LOG_LEVEL=\"${{ secrets.LOG_LEVEL }}\";
+                TOPIC_NAME=\"${{ secrets.TOPIC_NAME }}\";
+                SENDER_EMAIL=\"${{ secrets.SENDER_EMAIL }}\";
+                LINK_EXPIRATION_TIME_IN_MINUTES=\"${{ secrets.LINK_EXPIRATION_TIME_IN_MINUTES }}\";
 
-                  echo \"DB_NAME=\$DB_NAME\" | sudo tee \"\$ENV_FILE\"
-                  echo \"DB_USER=\$DB_USER\" | sudo tee -a \"\$ENV_FILE\"
-                  echo \"DB_PASSWORD=\$DB_PASSWORD\" | sudo tee -a \"\$ENV_FILE\"
-                  echo \"DB_PORT=\$DB_PORT\" | sudo tee -a \"\$ENV_FILE\"
-                  echo \"DB_HOSTNAME=\$DB_HOSTNAME\" | sudo tee -a \"\$ENV_FILE\"
-                  echo \"DB_DIALECT=\$DB_DIALECT\" | sudo tee -a \"\$ENV_FILE\"
-                  echo \"APP_PORT=\$APP_PORT\" | sudo tee -a \"\$ENV_FILE\"
-                  echo \"LOG_FILE_PATH=\$LOG_FILE_PATH\" | sudo tee -a \"\$ENV_FILE\"
-                  echo \"LOG_LEVEL=\$LOG_LEVEL\" | sudo tee -a \"\$ENV_FILE\"
-                  echo \"TOPIC_NAME=\$TOPIC_NAME\" | sudo tee -a \"\$ENV_FILE\"
-                  echo \"SENDER_EMAIL=\$SENDER_EMAIL\" | sudo tee -a \"\$ENV_FILE\"
-                  echo \"LINK_EXPIRATION_TIME_IN_MINUTES=\$LINK_EXPIRATION_TIME_IN_MINUTES\" | sudo tee -a \"\$ENV_FILE\"
-              else
-                  echo \".env file already exists, skipping adding values.\"
-              fi
-              chown -R csye6225:csye6225 /opt/csye6225/.env
-              chmod -R 750 /opt/csye6225/.env"
+                echo \"DB_NAME=\$DB_NAME\" | sudo tee \"\$ENV_FILE\";
+                echo \"DB_USER=\$DB_USER\" | sudo tee -a \"\$ENV_FILE\";
+                echo \"DB_PASSWORD=\$DB_PASSWORD\" | sudo tee -a \"\$ENV_FILE\";
+                echo \"DB_PORT=\$DB_PORT\" | sudo tee -a \"\$ENV_FILE\";
+                echo \"DB_HOSTNAME=\$DB_HOSTNAME\" | sudo tee -a \"\$ENV_FILE\";
+                echo \"DB_DIALECT=\$DB_DIALECT\" | sudo tee -a \"\$ENV_FILE\";
+                echo \"APP_PORT=\$APP_PORT\" | sudo tee -a \"\$ENV_FILE\";
+                echo \"LOG_FILE_PATH=\$LOG_FILE_PATH\" | sudo tee -a \"\$ENV_FILE\";
+                echo \"LOG_LEVEL=\$LOG_LEVEL\" | sudo tee -a \"\$ENV_FILE\";
+                echo \"TOPIC_NAME=\$TOPIC_NAME\" | sudo tee -a \"\$ENV_FILE\";
+                echo \"SENDER_EMAIL=\$SENDER_EMAIL\" | sudo tee -a \"\$ENV_FILE\";
+                echo \"LINK_EXPIRATION_TIME_IN_MINUTES=\$LINK_EXPIRATION_TIME_IN_MINUTES\" | sudo tee -a \"\$ENV_FILE\";
+            else
+                echo \".env file already exists, skipping adding values.\";
+            fi
+          "
       env:
           latest_image: ${{ steps.get-image-id.outputs.image_id }}
     
