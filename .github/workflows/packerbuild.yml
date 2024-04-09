@@ -89,7 +89,7 @@ jobs:
     - name: Create Instance Template
       run: |
        gcloud compute instance-templates create ${{ secrets.TEMPLATE_NAME }} \
-          --create-disk=image=${latest_image},size=${{ secrets.TEMPLATE_DISK_SIZE }},type=${{ secrets.TEMPLATE_DISK_TYPE }},boot=${{ secrets.TEMPLATE_BOOT }},kms-key=${{ secrets.TEMPLATE_KMS_KEY }} \
+          --create-disk=image=${latest_image},size=${{ secrets.TEMPLATE_DISK_SIZE }},type=${{ secrets.TEMPLATE_DISK_TYPE }},boot=${{ secrets.TEMPLATE_BOOT }},auto-delete=${{ secrets.AUTO_DELETE_FLAG }},kms-key=${{ secrets.TEMPLATE_KMS_KEY }} \
           --machine-type=${{ secrets.TEMPLATE_MACHINE_TYPE }} \
           --tags=${{ secrets.TEMPLATE_TAGS }} \
           --network-interface=network-tier=${{ secrets.TEMPLATE_NETWORK_TIER }},subnet=${{ secrets.TEMPLATE_SUBNET }} \
