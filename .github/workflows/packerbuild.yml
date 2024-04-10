@@ -131,7 +131,8 @@ jobs:
 
     - name: Recreate Instances in Managed Instance Group
       run: |
-        gcloud compute instance-groups managed rolling-action replace ${{ secrets.TEMPLATE_MIG_NAME }} \
+        gcloud compute instance-groups managed rolling-action start-update ${{ secrets.TEMPLATE_MIG_NAME }} \
+          --version=template=projects/${{ secrets.PROJECTID }}/regions/${{ secrets.TEMPLATE_REGION }}/instanceTemplates/${{ secrets.TEMPLATE_NAME }} \
           --max-surge=${{ secrets.MIG_MAX_SURGE }} \
           --max-unavailable=${{ secrets.MIG_MAX_UNAVAILABLE }} \
           --region=${{ secrets.TEMPLATE_REGION }}
