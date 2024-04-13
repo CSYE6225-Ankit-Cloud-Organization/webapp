@@ -20,7 +20,7 @@ describe('User API Integration Test', () => {
   // Test 1 - Create an account, and using the GET call, validate account exists.
   it('Test 1 - Create an account, and using the GET call, validate account exists', async () => {
     const createUserResponse = await supertest(app)
-      .post('/v1/user')
+      .post('/v2/user')
       .send({
         "first_name": "Jane",
         "last_name": "Doe",
@@ -33,7 +33,7 @@ describe('User API Integration Test', () => {
 
     // Test to retrieve the created user
     const getUserResponse = await supertest(app)
-      .get(`/v1/user/self`)
+      .get(`/v2/user/self`)
       .set('Authorization', `Basic ${Buffer.from('abc@example.com:abcd').toString('base64')}`);
     assert.strictEqual(getUserResponse.status, 200);
     assert.strictEqual(getUserResponse.body.id, userId);
@@ -44,7 +44,7 @@ describe('User API Integration Test', () => {
     // Update the user created in the previous test
     // Updating first_name and password in this step
     const updateUserResponse = await supertest(app)
-      .put('/v1/user/self')
+      .put('/v2/user/self')
       .set('Authorization', `Basic ${Buffer.from('abc@example.com:abcd').toString('base64')}`)
       .send({
         "first_name": "JaneUpdated",
@@ -56,7 +56,7 @@ describe('User API Integration Test', () => {
     // Test to retrieve the user after updates
     // checking if the authorization works with the updated password and for the same user.
     const getUserResponse = await supertest(app)
-      .get(`/v1/user/self`)
+      .get(`/v2/user/self`)
       .set('Authorization', `Basic ${Buffer.from('abc@example.com:abcd1').toString('base64')}`);
     assert.strictEqual(getUserResponse.status, 200);
     assert.strictEqual(getUserResponse.body.id, userId);
